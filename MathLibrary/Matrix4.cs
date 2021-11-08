@@ -49,8 +49,8 @@ namespace MathLibrary
         public static Matrix4 CreateRotationY(float radians)
         {
             return new Matrix4((float)Math.Cos(radians), 0, (float)Math.Sin(radians), 0,
-                               0, 0, 0, 0,
-                               (float)-Math.Sin(radians), 0, (float)Math.Cos(radians), 0,
+                               0, 1, 0, 0,
+                               -(float)Math.Sin(radians), 0, (float)Math.Cos(radians), 0,
                                0, 0, 0, 1);
         }
 
@@ -61,9 +61,9 @@ namespace MathLibrary
         /// <returns></returns>
         public static Matrix4 CreateRotationZ(float radians)
         {
-            return new Matrix4((float)Math.Cos(radians), (float)-Math.Sin(radians), 0, 0,
+            return new Matrix4((float)Math.Cos(radians), -(float)Math.Sin(radians), 0, 0,
                                (float)Math.Sin(radians), (float)Math.Cos(radians), 0, 0,
-                               0, 0, 0, 0,
+                               0, 0, 1, 0,
                                0, 0, 0, 1);
         }
 
@@ -87,9 +87,9 @@ namespace MathLibrary
         /// <param name="y">The y position of the new matrix</param>
         public static Matrix4 CreateTranslation(Vector3 vector)
         {
-            return new Matrix4(1, 0, 0, vector.x,
-                               0, 1, 0, vector.y,
-                               0, 0, 1, vector.z,
+            return new Matrix4(1, 0, 0, vector.X,
+                               0, 1, 0, vector.Y,
+                               0, 0, 1, vector.Z,
                                0, 0, 0, 1);
         }
 
@@ -115,9 +115,9 @@ namespace MathLibrary
         /// <returns>The result of the scale</returns>
         public static Matrix4 CreateScale(Vector3 vector)
         {
-            return new Matrix4(vector.x, 0, 0, 0,
-                               0, vector.y, 0, 0,
-                               0, 0, vector.z, 0,
+            return new Matrix4(vector.X, 0, 0, 0,
+                               0, vector.Y, 0, 0,
+                               0, 0, vector.Z, 0,
                                0, 0, 0, 1);
         }
 
@@ -180,10 +180,10 @@ namespace MathLibrary
         {
             return new Vector4
                 (
-                    lhs.M00 * rhs.x + lhs.M01 * rhs.x + lhs.M02 * rhs.x + lhs.M03 * rhs.x,
-                    lhs.M10 * rhs.y + lhs.M11 * rhs.y + lhs.M12 * rhs.y + lhs.M13 * rhs.y,
-                    lhs.M20 * rhs.z + lhs.M21 * rhs.z + lhs.M22 * rhs.z + lhs.M23 * rhs.z,
-                    lhs.M30 * rhs.w + lhs.M31 * rhs.w + lhs.M32 * rhs.w + lhs.M33 * rhs.w
+                    lhs.M00 * rhs.X + lhs.M01 * rhs.Y + lhs.M02 * rhs.Z + lhs.M03 * rhs.W,
+                    lhs.M10 * rhs.X + lhs.M11 * rhs.Y + lhs.M12 * rhs.Z + lhs.M13 * rhs.W,
+                    lhs.M20 * rhs.X + lhs.M21 * rhs.Y + lhs.M22 * rhs.Z + lhs.M23 * rhs.W,
+                    lhs.M30 * rhs.X + lhs.M31 * rhs.Y + lhs.M32 * rhs.Z + lhs.M33 * rhs.W
                 );
         }
     }

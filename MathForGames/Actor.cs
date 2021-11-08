@@ -9,7 +9,8 @@ namespace MathForGames
     public enum Shape
     {
         CUBE,
-        SPHERE
+        SPHERE,
+        NONE
     }
 
     class Actor
@@ -98,8 +99,8 @@ namespace MathForGames
         /// </summary>
         public Vector3 LocalPosition
         {
-            get { return new Vector3(_localTransform.M03 + WorldPosition.x, _localTransform.M13 + WorldPosition.y, _localTransform.M23 + WorldPosition.z); }
-            set { SetTranslation(value.x + WorldPosition.x, value.y + WorldPosition.y, value.z + WorldPosition.z); }
+            get { return new Vector3(_localTransform.M03 + WorldPosition.X, _localTransform.M13 + WorldPosition.Y, _localTransform.M23 + WorldPosition.Z); }
+            set { SetTranslation(value.X + WorldPosition.X, value.Y + WorldPosition.Y, value.Z + WorldPosition.Z); }
         }
 
         /// <summary>
@@ -115,9 +116,9 @@ namespace MathForGames
                 if (Parent != null)
                 {
                     //Offset the values by the Parents and tranlate the actor
-                    float xScale = (value.x - Parent.WorldPosition.x) / new Vector3(_globalTransform.M00, _globalTransform.M10, _globalTransform.M20).Magnitude;
-                    float yScale = (value.y - Parent.WorldPosition.y) / new Vector3(_globalTransform.M01, _globalTransform.M11, _globalTransform.M21).Magnitude;
-                    float zScale = (value.z - Parent.WorldPosition.z) / new Vector3(_globalTransform.M02, _globalTransform.M12, _globalTransform.M22).Magnitude;
+                    float xScale = (value.X - Parent.WorldPosition.X) / new Vector3(_globalTransform.M00, _globalTransform.M10, _globalTransform.M20).Magnitude;
+                    float yScale = (value.X - Parent.WorldPosition.Y) / new Vector3(_globalTransform.M01, _globalTransform.M11, _globalTransform.M21).Magnitude;
+                    float zScale = (value.X - Parent.WorldPosition.Z) / new Vector3(_globalTransform.M02, _globalTransform.M12, _globalTransform.M22).Magnitude;
                     SetTranslation(xScale, yScale, zScale);
                 }
                 //Else change the Local Position to the given values
@@ -146,7 +147,7 @@ namespace MathForGames
                 float zScale = new Vector3(_scale.M02, _scale.M12, _scale.M22).Magnitude;
                 return new Vector3(xScale, yScale, zScale); 
             }
-            set { SetScale(value.x, value.y, value.z); }
+            set { SetScale(value.X, value.Y, value.Z); }
         }
 
         /// <summary>
@@ -159,21 +160,15 @@ namespace MathForGames
         /// </summary>
         /// <param name="position">The position of the actor</param>
         /// <param name="name">The actor's name</param>
-        public Actor(Vector3 position, string name = "Actor", Shape shape = Shape.SPHERE)
+        public Actor(Vector3 position, string name = "Actor", Shape shape = Shape.NONE)
         {
             LocalPosition = position;
             _name = name;
             _shape = shape;
-
-            if (_shape == Shape.SPHERE)
-                Collider = new SphereCollider(this);
-            if (_shape == Shape.CUBE)
-                Collider = new AABBCollider(this.Size.x, this.Size.y, this);
-
         }
 
-        public Actor(float x, float y, float z, string name = "Actor", Shape shape = Shape.SPHERE) :
-            this(new Vector3 { x = x, y = y, z = z}, name, shape)
+        public Actor(float x, float y, float z, string name = "Actor", Shape shape = Shape.NONE) :
+            this(new Vector3 { X = x, Y = y, Z = z}, name, shape)
         { }
 
         /// <summary>
@@ -182,7 +177,7 @@ namespace MathForGames
         public void UpdateTransforms()
         {
             if (Parent != null)
-                GlobalTransform = Parent.GlobalTransform * LocalTransform;
+                GlobalTransform = Parent.LocalTransform * LocalTransform;
             else 
                 GlobalTransform = LocalTransform;
         }
@@ -260,22 +255,23 @@ namespace MathForGames
 
         public virtual void Draw()
         {
-            System.Numerics.Vector3 position = new System.Numerics.Vector3(WorldPosition.x, WorldPosition.y, WorldPosition.z);
+            System.Numerics.Vector3 position = new System.Numerics.Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z);
 
             switch (_shape)
             {
                 case Shape.CUBE:
-                    Raylib.DrawCube(position, Size.x, Size.y, Size.z, ShapeColor);
+                    Raylib.DrawCube(position, Size.X, Size.Y, Size.Z, ShapeColor);
                     break;
                 case Shape.SPHERE:
-                    Raylib.DrawSphere(position, Size.x, ShapeColor);
+                    Raylib.DrawSphere(position, Size.X, ShapeColor);
                     break;
             }
 
             if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
             {
-                System.Numerics.Vector3 endPos = new System.Numerics.Vector3(WorldPosition.x + Forward.x * 10, WorldPosition.y + Forward.y * 10, WorldPosition.z + Forward.z * 10);
+                System.Numerics.Vector3 endPos = new System.Numerics.Vector3(WorldPosition.X + Forward.X * 10, WorldPosition.Y + Forward.Y * 10, WorldPosition.Z + Forward.Z * 10);
                 Raylib.DrawLine3D(position, endPos, Color.RED);
+                if(_shape != Shape.NONE)
                 Collider.Draw();
             }
         }
@@ -395,7 +391,7 @@ namespace MathForGames
             Vector3 newXAxis = new Vector3(1, 0, 0);
 
             //If the direction vector is facing directly up
-            if (Math.Abs(direction.y) > 0 && direction.x == 0 && direction.z == 0)
+            if (Math.Abs(direction.Y) > 0 && direction.X == 0 && direction.Z == 0)
             {
                 //Set the Align Axis vector to face right
                 alignAxis = new Vector3(1, 0, 0);
@@ -415,9 +411,9 @@ namespace MathForGames
             }
 
             //Change the rotation with the new axis
-            _rotation = new Matrix4(newXAxis.x, newYAxis.x, direction.x, 0,
-                                    newXAxis.y, newYAxis.y, direction.y, 0,
-                                    newXAxis.z, newYAxis.z, direction.z, 0,
+            _rotation = new Matrix4(newXAxis.X, newYAxis.X, direction.X, 0,
+                                    newXAxis.Y, newYAxis.Y, direction.Y, 0,
+                                    newXAxis.Z, newYAxis.Z, direction.Z, 0,
                                     0, 0, 0, 1);
         }
 
@@ -436,7 +432,7 @@ namespace MathForGames
         /// <param name="colorValue">The Vector4 that holds the Color Values</param>
         public void SetColor(Vector4 colorValue)
         {
-            _color = new Color((int)colorValue.x, (int)colorValue.x, (int)colorValue.z, (int)colorValue.w);
+            _color = new Color((int)colorValue.X, (int)colorValue.Y, (int)colorValue.Z, (int)colorValue.W);
         }
 
         /// <summary>

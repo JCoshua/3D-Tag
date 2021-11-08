@@ -9,6 +9,7 @@ namespace MathForGames
     class Camera : Actor
     {
         private Camera3D _camera3D;
+        private Actor _cameraTarget;
 
         public Camera3D Camera3D
         {
@@ -16,6 +17,11 @@ namespace MathForGames
             set { _camera3D = value; }
         }
 
+        public Actor CameraTarget
+        {
+            get { return _cameraTarget; }
+            set { _cameraTarget = value; }
+        }
         public Vector3 Position
         {
             get { return _camera3D.position; }
@@ -61,6 +67,15 @@ namespace MathForGames
         }
 
         public Camera(Vector3 position, Actor target, Vector3 up, float fovy, CameraProjection projection, Camera3D camera) :
-            this(camera, position, new Vector3(target.WorldPosition.x, target.WorldPosition.x, target.WorldPosition.x), up, fovy, projection) { }
+            this(camera, position, new Vector3(target.WorldPosition.X, target.WorldPosition.Y, target.WorldPosition.Z), up, fovy, projection)
+        {
+            _cameraTarget = target;
+        }
+
+        public void FollowTarget()
+        {
+            Target = new Vector3(CameraTarget.WorldPosition.X, CameraTarget.WorldPosition.Y, CameraTarget.WorldPosition.Z);
+            Position = new Vector3(CameraTarget.WorldPosition.X, CameraTarget.WorldPosition.Y + 5, CameraTarget.WorldPosition.Z + 10);
+        }
     }
 }

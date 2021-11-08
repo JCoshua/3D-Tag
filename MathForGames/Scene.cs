@@ -12,14 +12,20 @@ namespace MathForGames
         /// </summary>
         private static Actor[] _actors;
         private static Actor[] _UIElements;
+        private string _name;
 
         public static Actor[] Actors
         {
             get { return _actors; }
         }
 
-        public Scene()
+        public string Name
         {
+            get { return _name; }
+        }
+        public Scene(string name)
+        {
+            _name = name;
             _actors = new Actor[0];
             _UIElements = new Actor[0];
         }
@@ -29,8 +35,6 @@ namespace MathForGames
         /// </summary>
         public virtual void Start()
         {
-            for (int i = 0; i < _actors.Length; i++)
-                _actors[i].Start();
         }
 
         /// <summary>
@@ -41,15 +45,15 @@ namespace MathForGames
         {
             for (int i = 0; i < _actors.Length; i++)
             {
-                if (_actors[i].Started)
+                if (!_actors[i].Started)
                     _actors[i].Start();
 
                 _actors[i].Update(deltaTime);
 
                 //Checks for collision
-                for (int j = 0; j < _actors.Length; j++)
-                    if (_actors[i].CheckCollision(_actors[j]) && i != j)
-                        _actors[i].OnCollision(_actors[j]);
+                //for (int j = 0; j < _actors.Length; j++)
+                //    if (_actors[i].CheckCollision(_actors[j]) && i != j)
+                //        _actors[i].OnCollision(_actors[j]);
             }
         }
 
@@ -99,13 +103,15 @@ namespace MathForGames
             //Adds the new actor to the end of the new array
             tempArray[_actors.Length] = actor;
 
-            Actor[] childArray = new Actor[tempArray.Length + 1];
+            Actor[] childArray = new Actor[tempArray.Length + actor.Children.Length];
             for (int i = 0; i < tempArray.Length; i++)
                 childArray[i] = tempArray[i];
+
             for (int i = 0; i < actor.Children.Length; i++)
                 childArray[tempArray.Length + i] = actor.Children[i];
+
             //Merges the arrays
-            _actors = tempArray;
+            _actors = childArray;
         }
 
         /// <summary>

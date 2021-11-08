@@ -4,13 +4,13 @@ namespace MathLibrary
 {
     public struct Vector2
     {
-        public float x;
-        public float y;
+        public float X;
+        public float Y;
 
-        public Vector2(float X, float Y)
+        public Vector2(float x, float y)
         {
-            x = X;
-            y = Y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace MathLibrary
         public float Magnitude
         {
             get
-            { return (float)Math.Sqrt(x * x + y * y); }
+            { return (float)Math.Sqrt(X * X + Y * Y); }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace MathLibrary
         /// <returns>The Dot Product of the first vector onto the second</returns>
         public static float DotProduct(Vector2 lhs, Vector2 rhs)
         {
-            return lhs.x * rhs.x + lhs.y * rhs.y;
+            return lhs.X * rhs.X + lhs.Y * rhs.Y;
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace MathLibrary
         /// <returns>The result of the addition</returns>
         public static Vector2 operator +(Vector2 lhs, Vector2 rhs)
         {
-            return new Vector2 { x = lhs.x + rhs.x, y = lhs.y + rhs.y };
+            return new Vector2 { X = lhs.X + rhs.X, Y = lhs.Y + rhs.Y };
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace MathLibrary
         /// <returns>The result of the subtraction</returns>
         public static Vector2 operator -(Vector2 lhs, Vector2 rhs)
         {
-            return new Vector2 { x = lhs.x - rhs.x, y = lhs.y - rhs.y };
+            return new Vector2 { X = lhs.X - rhs.X, Y = lhs.Y - rhs.Y };
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace MathLibrary
         /// <returns>The result of the multiplication</returns>
         public static Vector2 operator *(Vector2 lhs, Vector2 rhs)
         {
-            return new Vector2 { x = lhs.x * rhs.x, y = lhs.y * rhs.y };
+            return new Vector2 { X = lhs.X * rhs.X, Y = lhs.Y * rhs.Y };
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace MathLibrary
         /// <returns>The result of the multiplication</returns>
         public static Vector2 operator /(Vector2 lhs, Vector2 rhs)
         {
-            return new Vector2 { x = lhs.x / rhs.x, y = lhs.y / rhs.y };
+            return new Vector2 { X = lhs.X / rhs.X, Y = lhs.Y / rhs.Y };
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace MathLibrary
         /// <returns>The result of the vector scaling</returns>
         public static Vector2 operator *(Vector2 vector, float scaler)
         {
-            return new Vector2 { x = vector.x * scaler, y = vector.y * scaler };
+            return new Vector2 { X = vector.X * scaler, Y = vector.Y * scaler };
         }
         /// <summary>
         /// Divides the x and y values of the vector by the scaler
@@ -190,7 +190,7 @@ namespace MathLibrary
         /// <returns>The result of the vector scaling</returns>
         public static Vector2 operator /(Vector2 vector, float scaler)
         {
-            return new Vector2 { x = vector.x / scaler, y = vector.y / scaler };
+            return new Vector2 { X = vector.X / scaler, Y = vector.Y / scaler };
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace MathLibrary
         /// <returns>True if the values are equal</returns>
         public static bool operator ==(Vector2 lhs, Vector2 rhs)
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y;
+            return lhs.X == rhs.X && lhs.Y == rhs.Y;
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace MathLibrary
         /// <returns>True if the values are not equal</returns>
         public static bool operator !=(Vector2 lhs, Vector2 rhs)
         {
-            return lhs.x != rhs.x || lhs.y != rhs.y;
+            return lhs.X != rhs.X || lhs.Y != rhs.Y;
         }
     }
 }

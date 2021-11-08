@@ -10,6 +10,7 @@ namespace MathForGames
     {
         private float _width;
         private float _height;
+        private float _length;
 
         /// <summary>
         /// The size of the collider on the x axis
@@ -30,13 +31,22 @@ namespace MathForGames
         }
 
         /// <summary>
+        /// The size of the collider on the y axis
+        /// </summary>
+        public float Length
+        {
+            get { return _length; }
+            set { _length = value; }
+        }
+
+        /// <summary>
         /// The furthest Left X value of this collider
         /// </summary>
         public float Left
         {
             get
             {
-                return Owner.LocalPosition.x - (Width / 2);
+                return Owner.LocalPosition.X - (Width / 2);
             }
         }
 
@@ -47,7 +57,7 @@ namespace MathForGames
         {
             get
             {
-                return Owner.LocalPosition.x + (Width / 2);
+                return Owner.LocalPosition.X + (Width / 2);
             }
         }
 
@@ -58,7 +68,7 @@ namespace MathForGames
         {
             get
             {
-                return Owner.LocalPosition.y - (Height / 2);
+                return Owner.LocalPosition.Y - (Height / 2);
             }
         }
 
@@ -69,14 +79,44 @@ namespace MathForGames
         {
             get
             {
-                return Owner.LocalPosition.y + (Height / 2);
+                return Owner.LocalPosition.Y + (Height / 2);
             }
         }
 
-        public AABBCollider(float width, float height, Actor owner) : base(owner, ColliderType.AABB)
+        /// <summary>
+        /// The front of the Collider
+        /// </summary>
+        public float Front
+        {
+            get
+            {
+                return Owner.LocalPosition.Z + (Length / 2);
+            }
+        }
+
+        /// <summary>
+        /// The Back of the Collider
+        /// </summary>
+        public float Back
+        {
+            get
+            {
+                return Owner.LocalPosition.Z - (Length / 2);
+            }
+        }
+
+        public AABBCollider(float width, float height, float length, Actor owner) : base(owner, ColliderType.AABB)
         {
             _width = width;
             _height = height;
+            _length = length;
+        }
+
+        public AABBCollider(Actor owner) : base(owner, ColliderType.AABB)
+        {
+            _width = owner.Size.X;
+            _height = owner.Size.Y;
+            _length = owner.Size.Z;
         }
 
         public override bool CheckCollisionCircle(SphereCollider other)
@@ -99,7 +139,7 @@ namespace MathForGames
 
         public override void Draw()
         {
-                Raylib.DrawRectangleLines((int)Left, (int)Top, (int)Width, (int)Height, Color.RED);
+            Raylib.DrawCube(new System.Numerics.Vector3(Owner.WorldPosition.X, Owner.WorldPosition.Y, Owner.WorldPosition.Z), Width, Height, Length, Color.RED);
         }
     }
 }

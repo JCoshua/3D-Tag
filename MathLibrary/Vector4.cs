@@ -4,17 +4,17 @@ namespace MathLibrary
 {
     public struct Vector4
     {
-        public float x;
-        public float y;
-        public float z;
-        public float w;
+        public float X;
+        public float Y;
+        public float Z;
+        public float W;
 
-        public Vector4(float X, float Y, float Z, float W)
+        public Vector4(float x, float y, float z, float w)
         {
-            x = X;
-            y = Y;
-            z = Z;
-            w = W;
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace MathLibrary
         /// </summary>
         public float Magnitude
         {
-            get { return (float)Math.Sqrt(x * x + y * y + z * z); }
+            get { return (float)Math.Sqrt(X * X + Y * Y + Z * Z); }
         }
 
         /// <summary>
@@ -56,12 +56,12 @@ namespace MathLibrary
         /// <returns>The Dot Product of the first vector onto the second</returns>
         public static float DotProduct(Vector4 lhs, Vector4 rhs)
         {
-            return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z + rhs.z;
+            return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
         }
 
-        public static Vector4 CrossProduct(Vector3 lhs, Vector3 rhs)
+        public static Vector4 CrossProduct(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4(lhs.y * rhs.z - lhs.z * rhs.y, lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x, 0);
+            return new Vector4(lhs.Y * rhs.Z - lhs.Z * rhs.Y, lhs.Z * rhs.X - lhs.X * rhs.Z, lhs.X * rhs.Y - lhs.Y * rhs.X, 0);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace MathLibrary
         /// <returns>The result of the addition</returns>
         public static Vector4 operator +(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4 { x = lhs.x + rhs.x, y = lhs.y + rhs.y, z = lhs.z + rhs.z, w = lhs.w + rhs.w };
+            return new Vector4 { X = lhs.X + rhs.X, Y = lhs.Y + rhs.Y, Z = lhs.Z + rhs.Z, W = lhs.W + rhs.W };
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace MathLibrary
         /// <returns>The result of the subtraction</returns>
         public static Vector4 operator -(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4 { x = lhs.x - rhs.x, y = lhs.y - rhs.y, z = lhs.z - rhs.z, w = lhs.w - rhs.w };
+            return new Vector4 { X = lhs.X - rhs.X, Y = lhs.Y - rhs.Y, Z = lhs.Z - rhs.Z, W = lhs.W - rhs.W };
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace MathLibrary
         /// <returns>The result of the multiplication</returns>
         public static Vector4 operator *(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4 { x = lhs.x * rhs.x, y = lhs.y * rhs.y, z = lhs.z * rhs.z, w = lhs.w * rhs.w };
+            return new Vector4 { X = lhs.X * rhs.X, Y = lhs.Y * rhs.Y, Z = lhs.Z * rhs.Z, W = lhs.W * rhs.W };
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace MathLibrary
         /// <returns>The result of the multiplication</returns>
         public static Vector4 operator /(Vector4 lhs, Vector4 rhs)
         {
-            return new Vector4 { x = lhs.x / rhs.x, y = lhs.y / rhs.y, z = lhs.z / rhs.z, w = lhs.w / rhs.w };
+            return new Vector4 { X = lhs.X / rhs.X, Y = lhs.Y / rhs.Y, Z = lhs.Z / rhs.Z, W = lhs.W / rhs.W };
         }
 
         /// <summary>
@@ -188,8 +188,20 @@ namespace MathLibrary
         /// <returns>The result of the vector scaling</returns>
         public static Vector4 operator *(Vector4 vector, float scaler)
         {
-            return new Vector4 { x = vector.x * scaler, y = vector.y * scaler, z = vector.z * scaler, w = vector.w };
+            return new Vector4 { X = vector.X * scaler, Y = vector.Y * scaler, Z = vector.Z * scaler, W = vector.W };
         }
+
+        /// <summary>
+        /// Multiplies the x and y values of the vector by the scaler
+        /// </summary>
+        /// <param name="vector">The vector being scaled</param>
+        /// <param name="scaler">The scaler of the vector</param>
+        /// <returns>The result of the vector scaling</returns>
+        public static Vector4 operator *(float scaler, Vector4 vector)
+        {
+            return new Vector4 { X = vector.X * scaler, Y = vector.Y * scaler, Z = vector.Z * scaler, W = vector.W };
+        }
+
         /// <summary>
         /// Divides the x and y values of the vector by the scaler
         /// </summary>
@@ -198,7 +210,7 @@ namespace MathLibrary
         /// <returns>The result of the vector scaling</returns>
         public static Vector4 operator /(Vector4 vector, float scaler)
         {
-            return new Vector4 { x = vector.x / scaler, y = vector.y / scaler, z = vector.z / scaler, w = vector.w };
+            return new Vector4 { X = vector.X / scaler, Y = vector.Y / scaler, Z = vector.Z / scaler, W = vector.W };
         }
 
         /// <summary>
@@ -209,7 +221,7 @@ namespace MathLibrary
         /// <returns>True if the values are equal</returns>
         public static bool operator ==(Vector4 lhs, Vector4 rhs)
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w;
+            return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z && lhs.W == rhs.W;
         }
 
         /// <summary>
@@ -220,7 +232,7 @@ namespace MathLibrary
         /// <returns>True if the values are not equal</returns>
         public static bool operator !=(Vector4 lhs, Vector4 rhs)
         {
-            return lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z || lhs.z != rhs.w;
+            return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z || lhs.Z != rhs.W;
         }
     }
 }

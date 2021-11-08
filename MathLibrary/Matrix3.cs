@@ -31,8 +31,8 @@ namespace MathLibrary
         /// <returns></returns>
         public static Matrix3 CreateRotation(float radians)
         {
-            return new Matrix3((float)Math.Cos(radians), -(float)Math.Sin(radians), 0,
-                               (float)Math.Sin(radians), (float)Math.Cos(radians), 0,
+            return new Matrix3((float)Math.Cos(radians), (float)Math.Sin(radians), 0,
+                               -(float)Math.Sin(radians), (float)Math.Cos(radians), 0,
                                0, 0, 1);
         }
 
@@ -45,6 +45,18 @@ namespace MathLibrary
         {
             return new Matrix3(1, 0, x,
                                0, 1, y,
+                               0, 0, 1);
+        }
+
+        /// <summary>
+        /// Creates a new matrix that has been translated by the given value
+        /// </summary>
+        /// <param name="x">The x position of the new matrix</param>
+        /// <param name="y">The y position of the new matrix</param>
+        public static Matrix3 CreateTranslation(Vector2 vector)
+        {
+            return new Matrix3(1, 0, vector.X,
+                               0, 1, vector.Y,
                                0, 0, 1);
         }
 
@@ -104,9 +116,9 @@ namespace MathLibrary
         {
             return new Vector3
                 (
-                    lhs.M00 * rhs.x + lhs.M01 * rhs.x + lhs.M02 * rhs.x,
-                    lhs.M10 * rhs.y + lhs.M11 * rhs.y + lhs.M12 * rhs.y,
-                    lhs.M20 * rhs.z + lhs.M21 * rhs.z + lhs.M22 * rhs.z
+                    lhs.M00 * rhs.X + lhs.M01 * rhs.Y + lhs.M02 * rhs.Z,
+                    lhs.M10 * rhs.X + lhs.M11 * rhs.Y + lhs.M12 * rhs.Z,
+                    lhs.M20 * rhs.X + lhs.M21 * rhs.Y + lhs.M22 * rhs.Z
                 );
         }
     }

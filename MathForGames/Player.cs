@@ -23,8 +23,8 @@ namespace MathForGames
             set { _velocity = value; }
         }
 
-        public Player(float x, float y, float z, float speed, string name = "Actor", Shape shape = Shape.SPHERE)
-            : base(x, y, z, name, shape)
+        public Player(float x, float y, float z, float speed, string name = "Actor")
+            : base(x, y, z, name)
         {
             _speed = speed;
         }
@@ -45,17 +45,17 @@ namespace MathForGames
             if (Velocity.Magnitude > 0)
                 Forward = Velocity.Normalized;
 
-            Translate(Velocity.x, Velocity.y, Velocity.z);
+            Translate(Velocity.X, Velocity.Y, Velocity.Z);
             base.Update(deltaTime);
         }
 
         public override void Draw()
         {
-            base.Draw();
         }
 
         public override void OnCollision(Actor actor)
         {
+
         }
     }
 }

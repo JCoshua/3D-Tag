@@ -23,7 +23,7 @@ namespace MathForGames
 
         public SphereCollider (Actor owner) : base(owner, ColliderType.CIRCLE)
         {
-            CollisionRadius = Owner.Size.x;
+            CollisionRadius = Owner.Size.X;
         }
 
         public override bool CheckCollisionCircle(SphereCollider other)
@@ -51,8 +51,8 @@ namespace MathForGames
             Vector3 direction = Owner.LocalPosition - other.Owner.LocalPosition;
 
             //Clamps the direction to be within the AABB Collider
-            direction.x = Math.Clamp(direction.x, -other.Width/2, other.Width/2);
-            direction.y = Math.Clamp(direction.y, -other.Height/2, other.Height/2);
+            direction.X = Math.Clamp(direction.X, -other.Width/2, other.Width/2);
+            direction.Y = Math.Clamp(direction.Y, -other.Height/2, other.Height/2);
 
             //Finds the closest point by adding the direction vector to the AABB Center
             Vector3 closestPoint = other.Owner.LocalPosition + direction;
@@ -66,8 +66,7 @@ namespace MathForGames
 
         public override void Draw()
         {
-            base.Draw();
-            Raylib.DrawSphere(new System.Numerics.Vector3(Owner.WorldPosition.x, Owner.WorldPosition.y, Owner.WorldPosition.z), CollisionRadius, Color.RED);
+            Raylib.DrawSphere(new System.Numerics.Vector3(Owner.WorldPosition.X, Owner.WorldPosition.Y, Owner.WorldPosition.Z), CollisionRadius, Color.RED);
         }
     }
 }

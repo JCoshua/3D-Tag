@@ -4,15 +4,15 @@ namespace MathLibrary
 {
     public struct Vector3
     {
-        public float x;
-        public float y;
-        public float z;
+        public float X;
+        public float Y;
+        public float Z;
 
-        public Vector3(float X, float Y, float Z)
+        public Vector3(float x, float y, float z)
         {
-            x = X;
-            y = Y;
-            z = Z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace MathLibrary
         /// </summary>
         public float Magnitude
         {
-            get { return (float)Math.Sqrt(x * x + y * y + z * z); }
+            get { return (float)Math.Sqrt(X * X + Y * Y + Z * Z); }
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace MathLibrary
         /// <returns>The Dot Product of the first vector onto the second</returns>
         public static float DotProduct(Vector3 lhs, Vector3 rhs)
         {
-            return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z + rhs.z;
+            return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
         }
 
         public static Vector3 CrossProduct(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3(lhs.y * rhs.z - lhs.z * rhs.y,
-                               lhs.z * rhs.x - lhs.x * rhs.z,
-                               lhs.x * rhs.y - lhs.y * rhs.x);
+            return new Vector3(lhs.Y * rhs.Z - lhs.Z * rhs.Y,
+                               lhs.Z * rhs.X - lhs.X * rhs.Z,
+                               lhs.X * rhs.Y - lhs.Y * rhs.X);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace MathLibrary
         /// <returns>The result of the addition</returns>
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3 { x = lhs.x + rhs.x, y = lhs.y + rhs.y, z = lhs.z + rhs.z };
+            return new Vector3 { X = lhs.X + rhs.X, Y = lhs.Y + rhs.Y, Z = lhs.Z + rhs.Z };
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace MathLibrary
         /// <returns>The result of the subtraction</returns>
         public static Vector3 operator -(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3 { x = lhs.x - rhs.x, y = lhs.y - rhs.y, z = lhs.z - rhs.z };
+            return new Vector3 { X = lhs.X - rhs.X, Y = lhs.Y - rhs.Y, Z = lhs.Z - rhs.Z };
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace MathLibrary
         /// <returns>The result of the multiplication</returns>
         public static Vector3 operator *(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3 { x = lhs.x * rhs.x, y = lhs.y * rhs.y, z = lhs.z * rhs.z };
+            return new Vector3 { X = lhs.X * rhs.X, Y = lhs.Y * rhs.Y, Z = lhs.Z * rhs.Z };
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace MathLibrary
         /// <returns>The result of the multiplication</returns>
         public static Vector3 operator /(Vector3 lhs, Vector3 rhs)
         {
-            return new Vector3 { x = lhs.x / rhs.x, y = lhs.y / rhs.y, z = lhs.z / rhs.z };
+            return new Vector3 { X = lhs.X / rhs.X, Y = lhs.Y / rhs.Y, Z = lhs.Z / rhs.Z };
         }
 
         /// <summary>
@@ -188,8 +188,20 @@ namespace MathLibrary
         /// <returns>The result of the vector scaling</returns>
         public static Vector3 operator *(Vector3 vector, float scaler)
         {
-            return new Vector3 { x = vector.x * scaler, y = vector.y * scaler, z = vector.z * scaler };
+            return new Vector3 { X = vector.X * scaler, Y = vector.Y * scaler, Z = vector.Z * scaler };
         }
+
+        /// <summary>
+        /// Multiplies the x and y values of the vector by the scaler
+        /// </summary>
+        /// <param name="vector">The vector being scaled</param>
+        /// <param name="scaler">The scaler of the vector</param>
+        /// <returns>The result of the vector scaling</returns>
+        public static Vector3 operator *(float scaler, Vector3 vector)
+        {
+            return new Vector3 { X = vector.X * scaler, Y = vector.Y * scaler, Z = vector.Z * scaler };
+        }
+
         /// <summary>
         /// Divides the x and y values of the vector by the scaler
         /// </summary>
@@ -198,7 +210,7 @@ namespace MathLibrary
         /// <returns>The result of the vector scaling</returns>
         public static Vector3 operator /(Vector3 vector, float scaler)
         {
-            return new Vector3 { x = vector.x / scaler, y = vector.y / scaler, z = vector.z / scaler };
+            return new Vector3 { X = vector.X / scaler, Y = vector.Y / scaler, Z = vector.Z / scaler };
         }
 
         /// <summary>
@@ -209,7 +221,7 @@ namespace MathLibrary
         /// <returns>True if the values are equal</returns>
         public static bool operator ==(Vector3 lhs, Vector3 rhs)
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+            return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
         }
 
         /// <summary>
@@ -220,7 +232,7 @@ namespace MathLibrary
         /// <returns>True if the values are not equal</returns>
         public static bool operator !=(Vector3 lhs, Vector3 rhs)
         {
-            return lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z;
+            return lhs.X != rhs.X || lhs.Y != rhs.Y || lhs.Z != rhs.Z;
         }
     }
 }

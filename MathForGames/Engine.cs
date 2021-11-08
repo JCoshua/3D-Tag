@@ -12,10 +12,16 @@ namespace MathForGames
     {
         private static bool _applicationShouldClose = false;
         private static int _currentSceneIndex;
-        private Scene[] _scenes = new Scene[0];
+        private SceneManager _manager;
+        private static Scene[] _scenes = new Scene[0];
         private Stopwatch _stopwatch = new Stopwatch();
-        private Camera _camera = new Camera(new Camera3D());
+        private static Camera _camera = new Camera(new Camera3D());
 
+        public static Camera Camera
+        {
+            get { return _camera; }
+            set { _camera = value; }
+        }
         /// <summary>
         /// Called to begin the application
         /// </summary>
@@ -63,6 +69,8 @@ namespace MathForGames
         /// </summary>
         private void Start()
         {
+            //Crates the Scene Manager
+            _manager = new SceneManager();
             //Begins the stopwatch
             _stopwatch.Start();
 
@@ -71,10 +79,10 @@ namespace MathForGames
             Raylib.SetTargetFPS(60);
             InitializeCamera();
 
-            Scene scene = new Scene();
+            Scene scene = new Scene("Arena");
             AddScene(scene);
 
-            _scenes[_currentSceneIndex].Start();
+            _manager.Start();
         }
 
         /// <summary>
@@ -82,7 +90,8 @@ namespace MathForGames
         /// </summary>
         private void Update(float deltaTime)
         {
-            _scenes[_currentSceneIndex].Update(deltaTime);
+            _manager.Update(deltaTime);
+            Camera.FollowTarget();
         }
 
         /// <summary>
@@ -97,7 +106,7 @@ namespace MathForGames
             Raylib.DrawGrid(50, 1);
 
             //Adds all actor icons to buffer
-            _scenes[_currentSceneIndex].Draw();
+            _manager.Draw();
 
             Raylib.EndMode3D();
             Raylib.EndDrawing();
@@ -108,7 +117,7 @@ namespace MathForGames
         /// </summary>
         private void End()
         {
-            _scenes[_currentSceneIndex].End();
+            _manager.End();
             Raylib.CloseWindow(); 
         }
 
@@ -155,6 +164,11 @@ namespace MathForGames
         public static void CloseApplication()
         {
             _applicationShouldClose = true;
+        }
+
+        public static Scene GetCurrentScene()
+        {
+            return _scenes[_currentSceneIndex];
         }
     }
 }
