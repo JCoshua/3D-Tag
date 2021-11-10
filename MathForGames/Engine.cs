@@ -12,7 +12,6 @@ namespace MathForGames
     {
         private static bool _applicationShouldClose = false;
         private static int _currentSceneIndex;
-        private SceneManager _manager;
         private static Scene[] _scenes = new Scene[0];
         private Stopwatch _stopwatch = new Stopwatch();
         private static Camera _camera = new Camera(new Camera3D());
@@ -22,6 +21,7 @@ namespace MathForGames
             get { return _camera; }
             set { _camera = value; }
         }
+
         /// <summary>
         /// Called to begin the application
         /// </summary>
@@ -69,8 +69,6 @@ namespace MathForGames
         /// </summary>
         private void Start()
         {
-            //Crates the Scene Manager
-            _manager = new SceneManager();
             //Begins the stopwatch
             _stopwatch.Start();
 
@@ -82,7 +80,7 @@ namespace MathForGames
             Scene scene = new Scene("Arena");
             AddScene(scene);
 
-            _manager.Start();
+            SceneManager.Start();
         }
 
         /// <summary>
@@ -90,8 +88,8 @@ namespace MathForGames
         /// </summary>
         private void Update(float deltaTime)
         {
-            _manager.Update(deltaTime);
-            Camera.FollowTarget();
+            SceneManager.Update(deltaTime);
+            _camera.Update(deltaTime);
         }
 
         /// <summary>
@@ -102,13 +100,15 @@ namespace MathForGames
             Raylib.BeginDrawing();
             Raylib.BeginMode3D(_camera.Camera3D);
 
-            Raylib.ClearBackground(Color.DARKGREEN);
-            Raylib.DrawGrid(50, 1);
+            Raylib.ClearBackground(Color.BEIGE);
+            Raylib.DrawGrid(500, 50);
 
             //Adds all actor icons to buffer
-            _manager.Draw();
+            SceneManager.Draw();
 
             Raylib.EndMode3D();
+
+            SceneManager.DrawUI();
             Raylib.EndDrawing();
         }
 
@@ -117,7 +117,7 @@ namespace MathForGames
         /// </summary>
         private void End()
         {
-            _manager.End();
+            SceneManager.End();
             Raylib.CloseWindow(); 
         }
 

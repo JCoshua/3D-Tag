@@ -72,10 +72,12 @@ namespace MathForGames
             _cameraTarget = target;
         }
 
-        public void FollowTarget()
+        public override void Update(float deltaTime)
         {
             Target = new Vector3(CameraTarget.WorldPosition.X, CameraTarget.WorldPosition.Y, CameraTarget.WorldPosition.Z);
-            Position = new Vector3(CameraTarget.WorldPosition.X, CameraTarget.WorldPosition.Y + 5, CameraTarget.WorldPosition.Z + 10);
+            Position = new Vector3(CameraTarget.WorldPosition.X - CameraTarget.Forward.X * 25, CameraTarget.WorldPosition.Y + 5, CameraTarget.WorldPosition.Z - CameraTarget.Forward.Z * 25);
+
+            base.Update(deltaTime);
         }
     }
 }

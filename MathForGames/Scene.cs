@@ -46,14 +46,20 @@ namespace MathForGames
             for (int i = 0; i < _actors.Length; i++)
             {
                 if (!_actors[i].Started)
+                {
                     _actors[i].Start();
+                    for (int c = 0; c < _actors[i].Children.Length; c++)
+                    {
+                        AddActor(_actors[i].Children[c]);
+                    }
+                }
 
                 _actors[i].Update(deltaTime);
 
                 //Checks for collision
-                //for (int j = 0; j < _actors.Length; j++)
-                //    if (_actors[i].CheckCollision(_actors[j]) && i != j)
-                //        _actors[i].OnCollision(_actors[j]);
+                for (int j = 0; j < _actors.Length; j++)
+                    if (_actors[i].CheckCollision(_actors[j]) && i != j)
+                        _actors[i].OnCollision(_actors[j]);
             }
         }
 

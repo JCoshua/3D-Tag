@@ -16,12 +16,12 @@ namespace MathForGames
             set { _collisionRadius = value; }
         }
 
-        public SphereCollider(float collisionRadius, Actor owner) : base(owner, ColliderType.CIRCLE)
+        public SphereCollider(float collisionRadius, Actor owner) : base(owner, ColliderType.SPHERE)
         {
             CollisionRadius = collisionRadius;
         }
 
-        public SphereCollider (Actor owner) : base(owner, ColliderType.CIRCLE)
+        public SphereCollider (Actor owner) : base(owner, ColliderType.SPHERE)
         {
             CollisionRadius = Owner.Size.X;
         }
@@ -48,17 +48,18 @@ namespace MathForGames
                 return false;
 
             //Gets the direction from the collider to the AABB
-            Vector3 direction = Owner.LocalPosition - other.Owner.LocalPosition;
+            Vector3 direction = Owner.WorldPosition - other.Owner.WorldPosition;
 
             //Clamps the direction to be within the AABB Collider
-            direction.X = Math.Clamp(direction.X, -other.Width/2, other.Width/2);
-            direction.Y = Math.Clamp(direction.Y, -other.Height/2, other.Height/2);
+            direction.X = Math.Clamp(direction.X, -other.Width / 2, other.Width / 2);
+            direction.Y = Math.Clamp(direction.Y, -other.Height / 2, other.Height / 2);
+            direction.Z = Math.Clamp(direction.Z, -other.Length / 2, other.Length / 2);
 
             //Finds the closest point by adding the direction vector to the AABB Center
-            Vector3 closestPoint = other.Owner.LocalPosition + direction;
+            Vector3 closestPoint = other.Owner.WorldPosition + direction;
 
             //Finds the distance from the circle's center to the closest point
-            float distanceFromClosestPoint = Vector3.Distance(Owner.LocalPosition, closestPoint);
+            float distanceFromClosestPoint = Vector3.Distance(Owner.WorldPosition, closestPoint);
 
             //Returns if the distance from the closest point is less than the Collision Radius
             return distanceFromClosestPoint <= CollisionRadius;

@@ -6,7 +6,7 @@ namespace MathForGames
 {
     public enum ColliderType
     {
-        CIRCLE,
+        SPHERE,
         AABB
     }
     abstract class Collider
@@ -33,7 +33,7 @@ namespace MathForGames
 
         public bool CheckCollision(Actor other)
         {
-            if (other.Collider.ColliderType == ColliderType.CIRCLE)
+            if (other.Collider.ColliderType == ColliderType.SPHERE)
                 return CheckCollisionCircle((SphereCollider)other.Collider);
             else if (other.Collider.ColliderType == ColliderType.AABB)
                 return CheckCollisionAABB((AABBCollider)other.Collider);
@@ -45,6 +45,7 @@ namespace MathForGames
 
         public virtual bool CheckCollisionAABB(AABBCollider other) { return false; }
 
+        public virtual void Update() { }
         public virtual void Draw() { }
     }
 }

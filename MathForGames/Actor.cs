@@ -29,6 +29,7 @@ namespace MathForGames
         private Shape _shape;
         private Color _color;
         public bool IsActorGrounded = true;
+        private Vector3 _acceleration = new Vector3(0, 0, 0);
 
         public String Name
         {
@@ -48,7 +49,7 @@ namespace MathForGames
         /// </summary>
         public Vector3 Forward
         {
-            get { return new Vector3(_rotation.M02, _rotation.M12, _rotation.M22); }
+            get { return new Vector3(GlobalTransform.M02, GlobalTransform.M12, GlobalTransform.M22); }
             set
             {
                 Vector3 point = value.Normalized + WorldPosition;
@@ -94,6 +95,12 @@ namespace MathForGames
             get { return _children; }
         }
 
+        public Vector3 Acceleration
+        {
+            get { return _acceleration; }
+            set { _acceleration = value; }
+        }
+
         /// <summary>
         /// The position of the actor relative to the parent
         /// </summary>
@@ -109,7 +116,7 @@ namespace MathForGames
         public Vector3 WorldPosition
         {
             //Return the Global Transforms T Column
-            get { return new Vector3 (_translation.M03, _translation.M13, _translation.M23); }
+            get { return new Vector3 (GlobalTransform.M03, GlobalTransform.M13, GlobalTransform.M23); }
             set 
             {
                 //If the actor has a Parent
@@ -142,7 +149,7 @@ namespace MathForGames
         {
             get 
             {
-                float xScale = new Vector3(_scale.M00, _scale.M10, _scale.M20).Magnitude;
+                float xScale = new Vector3(_scale.M00, _scale.M01, _scale.M20).Magnitude;
                 float yScale = new Vector3(_scale.M01, _scale.M11, _scale.M21).Magnitude;
                 float zScale = new Vector3(_scale.M02, _scale.M12, _scale.M22).Magnitude;
                 return new Vector3(xScale, yScale, zScale); 
@@ -249,6 +256,7 @@ namespace MathForGames
 
         public virtual void Update(float deltaTime)
         {
+            Translate(Acceleration);
             LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
         }
@@ -283,7 +291,12 @@ namespace MathForGames
 
         public virtual void OnCollision(Actor actor)
         {
-
+            if (actor.Name == "Floor")
+            {
+                IsActorGrounded = true;
+                Acceleration = new Vector3(0, 0, 0);
+                WorldPosition = new Vector3(WorldPosition.X, 0.5f, WorldPosition.Z);
+            }
         }
 
         /// <summary>
@@ -293,6 +306,8 @@ namespace MathForGames
         /// <returns>True if the distance between the two actors is less than their combined radii</returns>
         public virtual bool CheckCollision(Actor other)
         {
+            if (Parent == other.Parent && Parent != null)
+                return false;
             //Returns false if there is a null collider
             if (Collider == null || other.Collider == null)
                 return false;
@@ -312,6 +327,17 @@ namespace MathForGames
         }
 
         /// <summary>
+        /// Sets the position of the actor
+        /// </summary>
+        /// <param name="translationX">The new x position</param>
+        /// <param name="translationY">The new y position</param>
+        /// <param name="translationZ">The new z position</param>
+        public void SetTranslation(Vector3 vector)
+        {
+            _translation = Matrix4.CreateTranslation(vector.X, vector.Y, vector.Z);
+        }
+
+        /// <summary>
         /// Applies the given values to the current translation
         /// </summary>
         /// <param name="translationX">The amount to move on the x axis</param>
@@ -320,6 +346,17 @@ namespace MathForGames
         public void Translate(float translationX, float translationY, float translationZ)
         {
             _translation *= Matrix4.CreateTranslation(translationX, translationY, translationZ);
+        }
+
+        /// <summary>
+        /// Applies the given values to the current translation
+        /// </summary>
+        /// <param name="translationX">The amount to move on the x axis</param>
+        /// <param name="translationY">The amount to move on the y axis</param>
+        /// <param name="translationY">The amount to move on the z axis</param>
+        public void Translate(Vector3 vector)
+        {
+            _translation *= Matrix4.CreateTranslation(vector.X, vector.Y, vector.Z);
         }
 
         /// <summary>
@@ -367,6 +404,15 @@ namespace MathForGames
         public void Scale(float x, float y, float z)
         {
             _scale *= Matrix4.CreateScale(x, y, z);
+        }
+
+        /// <summary>
+        /// Scales the actor by a scaler
+        /// </summary>
+        /// <param name="scaler">The Value to edit the entire scale</param>
+        public void Scale(float scaler)
+        {
+            _scale *= Matrix4.CreateScale(scaler, scaler, scaler);
         }
 
         /// <summary>

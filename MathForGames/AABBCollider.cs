@@ -68,7 +68,7 @@ namespace MathForGames
         {
             get
             {
-                return Owner.LocalPosition.Y - (Height / 2);
+                return Owner.LocalPosition.Y + (Height / 2);
             }
         }
 
@@ -79,7 +79,7 @@ namespace MathForGames
         {
             get
             {
-                return Owner.LocalPosition.Y + (Height / 2);
+                return Owner.LocalPosition.Y - (Height / 2);
             }
         }
 
@@ -132,14 +132,23 @@ namespace MathForGames
 
             //Returns True if there is an overlap betweens the two colliders
             return other.Left <= Right &&
-                   other.Top <= Bottom &&
+                   other.Bottom <= Top &&
+                   other.Back <= Front &&
                    Left <= other.Right &&
-                   Top <= other.Bottom;
+                   Bottom <= other.Top &&
+                   Back <= other.Front;
+        }
+
+        public override void Update()
+        {
+            _width = Owner.Size.X;
+            _height = Owner.Size.Y;
+            _length = Owner.Size.Z;
         }
 
         public override void Draw()
         {
-            Raylib.DrawCube(new System.Numerics.Vector3(Owner.WorldPosition.X, Owner.WorldPosition.Y, Owner.WorldPosition.Z), Width, Height, Length, Color.RED);
+            Raylib.DrawCubeWires(new System.Numerics.Vector3(Owner.WorldPosition.X, Owner.WorldPosition.Y, Owner.WorldPosition.Z), Width, Height, Length, Color.RED);
         }
     }
 }
