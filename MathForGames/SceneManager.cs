@@ -11,6 +11,7 @@ namespace MathForGames
         private static Scene _currentScene;
         private static Ally[] _allies = new Ally[0];
         private static Enemy[] _enemies = new Enemy[0];
+        private static int taggers = 3;
 
         public static Scene CurrentScene
         {
@@ -72,25 +73,38 @@ namespace MathForGames
 
         private static void IntializeArena()
         {
-            Player player = new Player(10, 10, 10, 50, "Player");
-            AddAlly(player);
+            Player player = new Player(10, 0.5f, 10, 20, "Player");
             _currentScene.AddActor(player);
-
-
-            Enemy enemy = new Enemy(-25, 0, 25, 50, "Enemy");
-            AddEnemy(enemy);
-            _currentScene.AddActor(enemy);
 
             Actor camera = new Actor(0, 0, 0);
             camera.Collider = new SphereCollider(0.01f, camera);
             player.AddChild(camera);
             Engine.Camera.CameraTarget = camera;
 
+            Enemy enemy = new Enemy(-25, 1, 25, 20, "Enemy");
+            _currentScene.AddActor(enemy);
+
             Actor floor = new Actor(0, -0.251f, 0, "Floor", Shape.CUBE);
             floor.SetScale(500, 0.5f, 500);
             floor.Collider = new AABBCollider(floor);
             floor.SetColor(Color.DARKGREEN);
             _currentScene.AddActor(floor);
+
+            Actor wall = new Actor(50, 0, 0, "Wall", Shape.CUBE);
+            wall.SetScale(10, 10, 100);
+            wall.Collider = new AABBCollider(wall);
+            wall.SetColor(Color.GRAY);
+            _currentScene.AddActor(wall);
+            //while (taggers > 0)
+            //{
+            //    int randomTagger = new Random().Next(0, 1);
+
+            //    for (int i = 0; i < Allies.Length; i++)
+            //    {
+
+            //    }
+            //}
+
         }
 
         /// <summary>
@@ -110,6 +124,25 @@ namespace MathForGames
 
             //Merges the arrays
             _allies = tempArray;
+        }
+
+        /// <summary>
+        /// Adds an actor to the scenes list of actors
+        /// </summary>
+        /// <param name="enemy">The Enemy to Remove</param>
+        public static void AddEnemy(Enemy enemy)
+        {
+            //Creates a temp array larger than the original
+            Enemy[] tempArray = new Enemy[_enemies.Length + 1];
+
+            //Copies all values from the orginal array into the temp array
+            for (int i = 0; i < _enemies.Length; i++)
+                tempArray[i] = _enemies[i];
+            //Adds the new actor to the end of the new array
+            tempArray[_enemies.Length] = enemy;
+
+            //Merges the arrays
+            _enemies = tempArray;
         }
 
         /// <summary>
@@ -145,25 +178,6 @@ namespace MathForGames
             }
 
             return actorRemoved;
-        }
-
-        /// <summary>
-        /// Adds an actor to the scenes list of actors
-        /// </summary>
-        /// <param name="enemy">The Enemy to Remove</param>
-        public static void AddEnemy(Enemy enemy)
-        {
-            //Creates a temp array larger than the original
-            Enemy[] tempArray = new Enemy[_enemies.Length + 1];
-
-            //Copies all values from the orginal array into the temp array
-            for (int i = 0; i < _enemies.Length; i++)
-                tempArray[i] = _enemies[i];
-            //Adds the new actor to the end of the new array
-            tempArray[_enemies.Length] = enemy;
-
-            //Merges the arrays
-            _enemies = tempArray;
         }
 
         /// <summary>

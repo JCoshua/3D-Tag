@@ -17,7 +17,7 @@ namespace MathForGames
     {
         private string _name;
         private bool _started;
-        private Vector3 _forwards = new Vector3(0, 0, 1);
+        private Vector3 _forward = new Vector3(1, 0, 0);
         private Collider _collider;
         private Matrix4 _globalTransform = Matrix4.Identity;
         private Matrix4 _localTransform = Matrix4.Identity;
@@ -277,9 +277,7 @@ namespace MathForGames
 
             if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
             {
-                System.Numerics.Vector3 endPos = new System.Numerics.Vector3(WorldPosition.X + Forward.X * 10, WorldPosition.Y + Forward.Y * 10, WorldPosition.Z + Forward.Z * 10);
-                Raylib.DrawLine3D(position, endPos, Color.RED);
-                if(_shape != Shape.NONE)
+                if (_shape != Shape.NONE)
                 Collider.Draw();
             }
         }
@@ -427,7 +425,7 @@ namespace MathForGames
             //If the direction's length is 0
             if (direction.Magnitude == 0)
                 //Set the direction to forwards
-                direction = new Vector3(0, 0, 1);
+                direction = new Vector3(1, 0, 1);
 
             //Create a Vector that points up
             Vector3 alignAxis = new Vector3(0, 1, 0);

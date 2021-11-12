@@ -8,25 +8,10 @@ namespace MathForGames
 {
     class Player : Ally
     {
-        private float _speed;
-        private Vector3 _velocity;
-
-        public float Speed
+        public Player(float x, float y, float z, float speed, string name = "Actor")
+            : base(x, y, z, speed, name)
         {
-            get { return _speed; }
-            set { _speed = value; }
-        }
 
-        public Vector3 Velocity
-        {
-            get { return _velocity; }
-            set { _velocity = value; }
-        }
-
-        public Player(float x, float y, float z, float speed, string name = "Actor", Shape shape = Shape.NONE)
-            : base(x, y, z, name, shape)
-        {
-            _speed = speed;
         }
 
         public override void Update(float deltaTime)
@@ -37,10 +22,6 @@ namespace MathForGames
             if (IsActorGrounded)
                 yDirection = Convert.ToInt32(Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE));
             int zDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_W)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_S));
-
-            if (!IsActorGrounded)
-                Acceleration += new Vector3(0, -0.00981f, 0);
-
 
             int zRotation = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_LEFT)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT));
             //Creates a vector that stores the move input
