@@ -11,7 +11,7 @@ namespace MathForGames
         private float _speed;
         private Vector3 _velocity;
         private Ally _target;
-        private bool _isTagger;
+        private bool _isTagger = false;
 
         public float Speed
         {
@@ -46,28 +46,60 @@ namespace MathForGames
             AddChild(head);
 
             Actor body = new Actor(0, 0, 0, "Body", Shape.CUBE);
-            body.SetScale(0.75f, 1, 0.5f);
+            body.SetScale(0.75f, 1, 0.75f);
             body.Collider = new AABBCollider(body);
             body.SetColor(255, 10, 10, 255);
             AddChild(body);
 
-            SceneManager.AddEnemy(this);
             base.Start();
         }
         public override void Update(float deltaTime)
         {
-            if (GetTargetInSight())
+            base.Update(deltaTime);
+
+            if (IsTagger)
             {
-                Vector3 moveDirection = (_target.WorldPosition - WorldPosition).Normalized;
-                Forward = moveDirection;
-                Velocity = moveDirection * Speed * deltaTime;
-                Translate(Velocity);
+                Console.WriteLine(Name + " is It");
+                if (GetTargetOffense())
+                {
+                    Vector3 moveDirection = (_target.WorldPosition - WorldPosition).Normalized;
+                    Forward = moveDirection;
+                    Velocity = moveDirection * Speed * deltaTime;
+                    Translate(Velocity);
+                }
+                else
+                {
+                    for (int i = 0; i < Scene.Actors.Length; i++)
+                        if (Scene.Actors[i] is Wall)
+                        {
+                            Wall checkWall = (Wall)Scene.Actors[i];
+                            checkWall.CheckMovement(this);
+                        }
+                    Velocity = Forward * Speed * deltaTime;
+                    Translate(Velocity);
+                }
             }
-            else
+            else if (!IsTagger)
             {
-                CheckMovement();
-                Velocity = Forward * Speed * deltaTime;
-                Translate(Velocity);
+                Console.WriteLine(Name + " is It");
+                if (GetTargetDefense())
+                {
+                    Vector3 moveDirection = new Vector3(-(_target.WorldPosition.X - WorldPosition.X), 0, -(_target.WorldPosition.Z - WorldPosition.Z)).Normalized;
+                    Forward = moveDirection;
+                    Velocity = moveDirection * Speed * deltaTime;
+                    Translate(Velocity);
+                }
+                else
+                {
+                    for (int i = 0; i < Scene.Actors.Length; i++)
+                        if (Scene.Actors[i] is Wall)
+                        {
+                            Wall checkWall = (Wall)Scene.Actors[i];
+                            checkWall.CheckMovement(this);
+                        }
+                    Velocity = Forward * Speed * deltaTime;
+                    Translate(Velocity);
+                }
             }
 
             if (WorldPosition.Y < 0.5f && WorldPosition.Y != 0)
@@ -85,9 +117,6 @@ namespace MathForGames
 
             if (!IsActorGrounded)
                 Acceleration += new Vector3(0, -0.00981f, 0);
-
-
-            base.Update(deltaTime);
         }
 
         public override void Draw()
@@ -115,52 +144,66 @@ namespace MathForGames
                 base.Draw();
         }
 
-        public bool GetTargetInSight()
-        {
-            GetTarget();
-            Vector3 directionOfTarget = (WorldPosition - _target.WorldPosition).Normalized;
-
-            return (Vector3.GetRadian(directionOfTarget, Forward) > 2 & Vector3.Distance(_target.WorldPosition, WorldPosition) < 200);
-        }
-
         public override void OnCollision(Actor actor)
         {
 
         }
 
-        public void GetTarget()
+        /// <summary>
+        /// Gets the target if this Enemy is tagged
+        /// </summary>
+        /// <returns>If the Enemy should approach the target</returns>
+        public bool GetTargetOffense()
         {
-            _target = SceneManager.Allies[0];
+            //Gets a the closest target that can be tagged
             for (int i = 0; i < SceneManager.Allies.Length; i++)
-                if (Vector3.Distance(_target.WorldPosition, WorldPosition) > Vector3.Distance(SceneManager.Allies[i].WorldPosition, WorldPosition))
-                    _target = SceneManager.Allies[i];
+                if (!SceneManager.Allies[i].IsTagger)
+                    if (_target == null)
+                        _target = SceneManager.Allies[i];
+                    else if (Vector3.Distance(_target.WorldPosition, WorldPosition) > Vector3.Distance(SceneManager.Allies[i].WorldPosition, WorldPosition))
+                        _target = SceneManager.Allies[i];
+
+            //If there is a target
+            if (_target != null)
+            {
+                //Check the direction of the target
+                Vector3 directionOfTarget = (WorldPosition - _target.WorldPosition).Normalized;
+
+                //Return if the Enemy is facing the target, and if they are close enough to the target
+                return (Vector3.GetRadian(directionOfTarget, Forward) > 2 & Vector3.Distance(_target.WorldPosition, WorldPosition) < 200);
+            }
+
+            //Return false by default
+            return false;
         }
 
-        public void CheckMovement()
+        /// <summary>
+        /// Gets the closet target that can tag them
+        /// </summary>
+        /// <returns>If the Enemy is in danger of being tagged</returns>
+        public bool GetTargetDefense()
         {
-            for (int i = 0; i < Scene.Actors.Length; i++)
+            //Gets a the closest target that can be tagged
+            for (int i = 0; i < SceneManager.Allies.Length; i++)
+                if (SceneManager.Allies[i].IsTagger)
+                    if (_target == null)
+                        _target = SceneManager.Allies[i];
+                    else if (Vector3.Distance(_target.WorldPosition, WorldPosition) > Vector3.Distance(SceneManager.Allies[i].WorldPosition, WorldPosition))
+                        _target = SceneManager.Allies[i];
+
+            //If there is a target
+            if (_target != null)
             {
-                if (Scene.Actors[i].Name == "Wall")
-                {
-                    AABBCollider GetWallCollider = (AABBCollider)Scene.Actors[i].Collider;
-                    if ((GetWallCollider.Right > Forward.Z && GetWallCollider.Left < Forward.Z) ||
-                        (GetWallCollider.Left > Forward.Z && GetWallCollider.Right < Forward.Z))
-                    {
-                        if (Vector3.Distance(Scene.Actors[i].WorldPosition, WorldPosition) == 10)
-                        {
-                            Forward = new Vector3(Forward.X, Forward.Y, Forward.Z + 0.5f);
-                        }
-                    }
-                    else if ((GetWallCollider.Front > Forward.X && GetWallCollider.Back < Forward.X) ||
-                             (GetWallCollider.Back > Forward.X && GetWallCollider.Front < Forward.X))
-                    {
-                        if (Vector3.Distance(Scene.Actors[i].WorldPosition, WorldPosition) == 10)
-                        {
-                            Forward = new Vector3(Forward.X + 0.5f, Forward.Y, Forward.Z);
-                        }
-                    }
-                }
+                //Check the direction of the target
+                Vector3 directionOfTarget = (WorldPosition - _target.WorldPosition).Normalized;
+
+                //Return if the Ally is facing the target, and if they are close enough to the target
+                return (Vector3.GetRadian(directionOfTarget, Forward) > 2 & Vector3.Distance(_target.WorldPosition, WorldPosition) < 200);
             }
+
+            //Return false by default
+            return false;
         }
     }
 }
+

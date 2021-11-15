@@ -74,6 +74,7 @@ namespace MathForGames
         private static void IntializeArena()
         {
             Player player = new Player(10, 0.5f, 10, 20, "Player");
+            AddAlly(player);
             _currentScene.AddActor(player);
 
             Actor camera = new Actor(0, 0, 0);
@@ -81,8 +82,17 @@ namespace MathForGames
             player.AddChild(camera);
             Engine.Camera.CameraTarget = camera;
 
+            Ally ally = new Ally(10, 0.5f, 15, 20, "James");
+            AddAlly(ally);
+            _currentScene.AddActor(ally);
+
             Enemy enemy = new Enemy(-25, 1, 25, 20, "Enemy");
+            AddEnemy(enemy);
             _currentScene.AddActor(enemy);
+
+            Enemy enemy2 = new Enemy(-25, 1, 15, 20, "Enemy");
+            AddEnemy(enemy2);
+            _currentScene.AddActor(enemy2);
 
             Actor floor = new Actor(0, -0.251f, 0, "Floor", Shape.CUBE);
             floor.SetScale(500, 0.5f, 500);
@@ -90,20 +100,31 @@ namespace MathForGames
             floor.SetColor(Color.DARKGREEN);
             _currentScene.AddActor(floor);
 
-            Actor wall = new Actor(50, 0, 0, "Wall", Shape.CUBE);
-            wall.SetScale(10, 10, 100);
-            wall.Collider = new AABBCollider(wall);
-            wall.SetColor(Color.GRAY);
-            _currentScene.AddActor(wall);
-            //while (taggers > 0)
-            //{
-            //    int randomTagger = new Random().Next(0, 1);
+            Wall wall = new Wall(-1, 0, 2.1f, 100, 10, 10, CurrentScene);
 
-            //    for (int i = 0; i < Allies.Length; i++)
-            //    {
+            Wall wall2 = new Wall(1.65f, 0, 0.6f, 10, 10, 100, CurrentScene);
 
-            //    }
-            //}
+            while (taggers > 0)
+            {
+                for (int i = 0; i < Enemies.Length; i++)
+                {
+                    int randomTag = new Random().Next(0, 2);
+                    if(randomTag == 1 && !Enemies[i].IsTagger && taggers > 0)
+                    {
+                        Enemies[i].IsTagger = true;
+                        taggers--;
+                    }
+                }
+                for (int i = 0; i < Allies.Length; i++)
+                {
+                    int randomTag = new Random().Next(0, 2);
+                    if (randomTag == 1 && !Allies[i].IsTagger && taggers > 0)
+                    {
+                        Allies[i].IsTagger = true;
+                        taggers--;
+                    }
+                }
+            }
 
         }
 

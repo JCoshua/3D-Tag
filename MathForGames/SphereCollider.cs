@@ -58,6 +58,8 @@ namespace MathForGames
             //Finds the closest point by adding the direction vector to the AABB Center
             Vector3 closestPoint = other.Owner.WorldPosition + direction;
 
+            CollisionNormal = (closestPoint - Owner.WorldPosition).Normalized;
+            other.CollisionNormal = (Owner.WorldPosition - closestPoint).Normalized;
             //Finds the distance from the circle's center to the closest point
             float distanceFromClosestPoint = Vector3.Distance(Owner.WorldPosition, closestPoint);
 

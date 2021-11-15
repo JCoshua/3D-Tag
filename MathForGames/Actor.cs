@@ -259,6 +259,8 @@ namespace MathForGames
             Translate(Acceleration);
             LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
+
+            
         }
 
         public virtual void Draw()

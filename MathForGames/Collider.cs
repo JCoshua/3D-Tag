@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MathLibrary;
 
 namespace MathForGames
 {
@@ -13,6 +14,7 @@ namespace MathForGames
     {
         private Actor _owner;
         private ColliderType _colliderType;
+        private Vector3 _collisionNormal;
 
         public Actor Owner
         {
@@ -25,6 +27,11 @@ namespace MathForGames
             get { return _colliderType; }
         }
 
+        public Vector3 CollisionNormal
+        {
+            get { return _collisionNormal; }
+            set { _collisionNormal = value; }
+        }
         public Collider(Actor owner, ColliderType colliderType)
         {
             _owner = owner;
