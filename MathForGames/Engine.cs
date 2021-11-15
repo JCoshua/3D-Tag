@@ -101,7 +101,7 @@ namespace MathForGames
             Raylib.BeginMode3D(_camera.Camera3D);
 
             Raylib.ClearBackground(Color.BEIGE);
-            Raylib.DrawGrid(500, 50);
+            //Raylib.DrawGrid(500, 50);
 
             //Adds all actor icons to buffer
             SceneManager.Draw();

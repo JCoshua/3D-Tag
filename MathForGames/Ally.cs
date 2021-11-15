@@ -98,9 +98,6 @@ namespace MathForGames
                     Velocity = Forward * Speed * deltaTime;
                     Translate(Velocity);
                 }
-
-                if (IsTagger)
-                    Console.WriteLine(Name + " is It");
             }
 
 
@@ -216,7 +213,7 @@ namespace MathForGames
         {
             if (actor is Enemy)
             {
-                Translate(-Velocity.X, 0, -Velocity.Z);
+                Translate(Collider.CollisionNormal);
                 Enemy enemy = (Enemy)actor;
                 if (enemy.IsTagger && !IsTagger)
                 {
@@ -227,7 +224,10 @@ namespace MathForGames
                     IsTagger = false;
                 }
             }
-                
+            //else if(actor is Wall)
+            //{
+            //    Translate(-Collider.CollisionNormal.X * Speed, 0, -Collider.CollisionNormal.Z * Speed);
+            //}
         }
     }
 }

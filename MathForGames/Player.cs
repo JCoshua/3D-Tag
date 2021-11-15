@@ -20,7 +20,7 @@ namespace MathForGames
             int xDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_A)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_D));
             int yDirection = 0;
             if (IsActorGrounded)
-                yDirection = Convert.ToInt32(Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE));
+                yDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_SPACE));
             int zDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_W)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_S));
 
             int zRotation = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_LEFT)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT));
@@ -29,9 +29,9 @@ namespace MathForGames
             Velocity = moveDirection.Normalized * Speed * deltaTime;
 
             Rotate(0, zRotation * deltaTime, 0);
-            Translate(Velocity.X, Velocity.Y * 5, Velocity.Z);
+            Translate(Velocity.X, Velocity.Y, Velocity.Z);
 
-            
+            if(Size.Y < 10)
             base.Update(deltaTime);
         }
 
@@ -40,9 +40,15 @@ namespace MathForGames
             base.Draw();
         }
 
-        public override void OnCollision(Actor actor)
+        public override void OnCollision(Actor other)
         {
+            if(other is Wall)
+            {
+                Console.WriteLine("Collision Normal: " + Collider.CollisionNormal.X + ", " + Collider.CollisionNormal.Y + ", " + Collider.CollisionNormal.Z);
+            }
 
+
+            base.OnCollision(other);
         }
     }
 }

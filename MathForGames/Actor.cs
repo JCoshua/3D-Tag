@@ -184,7 +184,7 @@ namespace MathForGames
         public void UpdateTransforms()
         {
             if (Parent != null)
-                GlobalTransform = Parent.LocalTransform * LocalTransform;
+                GlobalTransform = Parent.GlobalTransform * LocalTransform;
             else 
                 GlobalTransform = LocalTransform;
         }
@@ -259,8 +259,6 @@ namespace MathForGames
             Translate(Acceleration);
             LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
-
-            
         }
 
         public virtual void Draw()
@@ -297,6 +295,11 @@ namespace MathForGames
                 Acceleration = new Vector3(0, 0, 0);
                 WorldPosition = new Vector3(WorldPosition.X, 0.5f, WorldPosition.Z);
             }
+
+            if (actor is Wall && Parent != null)
+            {
+                Parent.OnCollision(actor);
+            }
         }
 
         /// <summary>
@@ -306,8 +309,6 @@ namespace MathForGames
         /// <returns>True if the distance between the two actors is less than their combined radii</returns>
         public virtual bool CheckCollision(Actor other)
         {
-            if (Parent == other.Parent && Parent != null)
-                return false;
             //Returns false if there is a null collider
             if (Collider == null || other.Collider == null)
                 return false;

@@ -59,7 +59,6 @@ namespace MathForGames
 
             if (IsTagger)
             {
-                Console.WriteLine(Name + " is It");
                 if (GetTargetOffense())
                 {
                     Vector3 moveDirection = (_target.WorldPosition - WorldPosition).Normalized;
@@ -81,7 +80,6 @@ namespace MathForGames
             }
             else if (!IsTagger)
             {
-                Console.WriteLine(Name + " is It");
                 if (GetTargetDefense())
                 {
                     Vector3 moveDirection = new Vector3(-(_target.WorldPosition.X - WorldPosition.X), 0, -(_target.WorldPosition.Z - WorldPosition.Z)).Normalized;
