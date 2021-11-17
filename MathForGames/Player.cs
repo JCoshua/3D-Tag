@@ -20,7 +20,7 @@ namespace MathForGames
             int xDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_A)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_D));
             int yDirection = 0;
             if (IsActorGrounded)
-                yDirection = Convert.ToInt32(Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE));
+                yDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_SPACE));
             int zDirection = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_W)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_S));
 
             int zRotation = Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_LEFT)) - Convert.ToInt32(Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT));
@@ -42,7 +42,20 @@ namespace MathForGames
 
         public override void OnCollision(Actor actor)
         {
+            if (actor is Enemy && WorldPosition.Y != 0 && !IsTagger)
+            {
+                SceneManager.CurrentScene.RemoveActor(this);
+                Engine.Camera.CameraTarget = Scene.Actors[0];
+                Engine.Camera.TargetOrigin = true;
+                UIText caught = new UIText(120, 100, 50, "You Were Caught", Color.BLACK, 400, 400, 50, "You Were Caught");
+                SceneManager.CurrentScene.AddUIElement(caught);
+                SceneManager.RemoveAlly(this);
+            }
+            else if (actor is Wall && WorldPosition.Y != 0)
+                Translate(-Collider.CollisionNormal.X * 5, 0, -Collider.CollisionNormal.Z * 5);
 
+            else if (actor is PowerUp && WorldPosition.Y != 0)
+                HasPowerUp = true;
         }
     }
 }

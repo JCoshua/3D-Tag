@@ -10,6 +10,7 @@ namespace MathForGames
     {
         private Camera3D _camera3D;
         private Actor _cameraTarget;
+        private bool _targetOrigin = false;
 
         public Camera3D Camera3D
         {
@@ -52,6 +53,12 @@ namespace MathForGames
             set { _camera3D.projection = value; }
         }
 
+        public bool TargetOrigin
+        {
+            get { return _targetOrigin; }
+            set { _targetOrigin = value; }
+        }
+
         public Camera(Camera3D camera)
         {
             _camera3D = camera;
@@ -74,8 +81,16 @@ namespace MathForGames
 
         public override void Update(float deltaTime)
         {
-            Target = new Vector3(CameraTarget.WorldPosition.X, CameraTarget.WorldPosition.Y, CameraTarget.WorldPosition.Z);
-            Position = new Vector3(CameraTarget.WorldPosition.X - CameraTarget.Forward.X * 25, CameraTarget.WorldPosition.Y + 5, CameraTarget.WorldPosition.Z - CameraTarget.Forward.Z * 25);
+            if(!TargetOrigin)
+            {
+                Target = new Vector3(CameraTarget.WorldPosition.X, CameraTarget.WorldPosition.Y, CameraTarget.WorldPosition.Z);
+                Position = new Vector3(CameraTarget.WorldPosition.X - CameraTarget.Forward.X * 25, CameraTarget.WorldPosition.Y + 5, CameraTarget.WorldPosition.Z - CameraTarget.Forward.Z * 25);
+            }
+            else if(TargetOrigin)
+            {
+                CameraTarget.Rotate(0, 0.01f, 0);
+                Position = new Vector3(100 - CameraTarget.Forward.X * 25, 50, 100 - CameraTarget.Forward.Z * 25);
+            }
 
             base.Update(deltaTime);
         }

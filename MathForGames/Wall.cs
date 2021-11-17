@@ -16,17 +16,17 @@ namespace MathForGames
                 }
         }
 
-        public Wall(float posX, float posY, float posZ, float lenght, float height, float width, Scene scene) : base(posX, posY, posZ, "Wall", Shape.CUBE)
+        public Wall(float posX, float posY, float posZ, float length, float height, float width, Scene scene) : base(posX, posY, posZ, "Wall", Shape.CUBE)
         {
-            SetScale(lenght, height, width);
+            SetScale(length, height, width);
             scene.AddActor(this);
-            Collider = new AABBCollider(this);
+            Collider = new AABBCollider(width, height, length, this);
             SetColor(Color.GRAY);
         }
 
         public void CheckMovement(Actor actor)
         {
-            if (RotationCollider.CheckCollision(actor.Children[0]))
+            if (RotationCollider.CheckCollision(actor.Children[0]) && WorldPosition.Y != 0)
             {
                 if((actor.Forward.Z + actor.WorldPosition.Z) - WorldPosition.Z > actor.WorldPosition.Z - WorldPosition.Z ||
                    (actor.Forward.X + actor.WorldPosition.X) - WorldPosition.X > actor.WorldPosition.X - WorldPosition.X)

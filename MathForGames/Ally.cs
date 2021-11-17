@@ -12,6 +12,8 @@ namespace MathForGames
         private Vector3 _velocity;
         private Enemy _target;
         private bool _isTagger = false;
+        private bool _hasPowerUp = false;
+        private float _powerUpTimer = 0;
 
         public float Speed
         {
@@ -31,6 +33,11 @@ namespace MathForGames
             set { _isTagger = value; }
         }
 
+        public bool HasPowerUp
+        {
+            get { return _hasPowerUp; }
+            set { _hasPowerUp = value; }
+        }
         public Ally(float x, float y, float z, float speed, string name = "Actor")
             : base(x, y, z, name)
         {
@@ -48,7 +55,7 @@ namespace MathForGames
 
             Actor body = new Actor(0, 0, 0, "Body", Shape.CUBE);
             body.SetScale(0.75f, 1, 0.75f);
-            body.Collider = new AABBCollider(body);
+            Collider = new AABBCollider(this);
             body.SetColor(10, 10, 255, 255);
             AddChild(body);
 
@@ -59,66 +66,103 @@ namespace MathForGames
         {
             base.Update(deltaTime);
 
-            if (IsTagger && !(this is Player))
-                if (GetTargetOffense())
-                {
-                    Vector3 moveDirection = (_target.WorldPosition - WorldPosition).Normalized;
-                    Forward = moveDirection;
-                    Velocity = moveDirection * Speed * deltaTime;
-                    Translate(Velocity);
-                }
-                else
-                {
-                    for (int i = 0; i < Scene.Actors.Length; i++)
-                        if (Scene.Actors[i] is Wall)
-                        {
-                            Wall checkWall = (Wall)Scene.Actors[i];
-                            checkWall.CheckMovement(this);
-                        }
-                    Velocity = Forward * Speed * deltaTime;
-                    Translate(Velocity);
-                }
-            else if (!IsTagger && !(this is Player))
+            if (WorldPosition.X >= 145 || WorldPosition.Z >= 145 || WorldPosition.X <= -145 || WorldPosition.Z <= -145)
             {
-                if (GetTargetDefense())
-                {
-                    Vector3 moveDirection = new Vector3(-(_target.WorldPosition.X - WorldPosition.X), 0, -(_target.WorldPosition.Z - WorldPosition.Z)).Normalized;
-                    Forward = moveDirection;
-                    Velocity = moveDirection * Speed * deltaTime;
-                    Translate(Velocity);
-                }
-                else
-                {
-                    for (int i = 0; i < Scene.Actors.Length; i++)
-                        if (Scene.Actors[i] is Wall)
-                        {
-                            Wall checkWall = (Wall)Scene.Actors[i];
-                            checkWall.CheckMovement(this);
-                        }
-                    Velocity = Forward * Speed * deltaTime;
-                    Translate(Velocity);
-                }
-
-                if (IsTagger)
-                    Console.WriteLine(Name + " is It");
+                SetTranslation(0, 0.5f, 0);
             }
 
+                if (IsTagger && !(this is Player))
+                {
+                    if (GetTargetOffense())
+                    {
+                        Vector3 moveDirection = (_target.WorldPosition - WorldPosition).Normalized;
+                        Forward = moveDirection;
+                        Velocity = moveDirection * Speed * deltaTime;
+                        Translate(Velocity);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Scene.Actors.Length; i++)
+                            if (Scene.Actors[i] is Wall)
+                            {
+                                Wall checkWall = (Wall)Scene.Actors[i];
+                                checkWall.CheckMovement(this);
+                            }
+                        Velocity = Forward * Speed * deltaTime;
+                        Translate(Velocity);
+                    }
+                }
+                else if (!IsTagger && !(this is Player))
+                {
+                    if (GetTargetDefense())
+                    {
+                        for (int i = 0; i < Scene.Actors.Length; i++)
+                            if (Scene.Actors[i] is Wall)
+                            {
+                                Wall checkWall = (Wall)Scene.Actors[i];
+                                checkWall.CheckMovement(this);
+                            }
+                        Vector3 moveDirection = new Vector3(-(_target.WorldPosition.X - WorldPosition.X), 0, -(_target.WorldPosition.Z - WorldPosition.Z)).Normalized;
+                        Forward = moveDirection;
+                        Velocity = moveDirection * Speed * deltaTime;
+                        Translate(Velocity);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Scene.Actors.Length; i++)
+                            if (Scene.Actors[i] is Wall)
+                            {
+                                Wall checkWall = (Wall)Scene.Actors[i];
+                                checkWall.CheckMovement(this);
+                            }
+                        Velocity = Forward * Speed * deltaTime;
+                        Translate(Velocity);
+                    }
+                }
 
-            if (!IsActorGrounded)
-                Acceleration += new Vector3(0, -0.00981f, 0);
-
-            if (WorldPosition.Y < 0.5f && WorldPosition.Y != 0)
+            if (_hasPowerUp)
             {
-                //Sets the Vertical Acceleration to 0
-                Acceleration = new Vector3(Acceleration.X, 0, Acceleration.Z);
-                //Set their position to be on the Ground
-                SetTranslation(WorldPosition.X, 0.5f, WorldPosition.Z);
-                //Declare them grounded
-                IsActorGrounded = true;
+                _powerUpTimer += deltaTime;
+                if (_powerUpTimer >= 20 && this is Player)
+                {
+                    SetScale(1, 1, 1);
+                    Children[0].SetScale(1, 1, 1);
+                    Children[1].SetScale(0.5f, 0.5f, 0.5f);
+                    Children[1].SetColor(255, 100, 100, 255);
+                    Children[2].SetScale(0.75f, 1, 0.75f);
+                    Children[2].SetColor(10, 10, 255, 255);
+                    Speed = 20;
+                    _powerUpTimer = 0;
+                    _hasPowerUp = false;
+                }
+                else if (_powerUpTimer >= 15 && !(this is Player))
+                {
+                    SetScale(1, 1, 1);
+                    Children[0].SetScale(0.5f, 0.5f, 0.5f);
+                    Children[0].SetColor(255, 100, 100, 255);
+                    Children[1].SetScale(0.75f, 1, 0.75f);
+                    Children[1].SetColor(10, 10, 255, 255);
+                    Speed = 20;
+                    _powerUpTimer = 0;
+                    _hasPowerUp = false;
+                }
+
+                if (!IsActorGrounded)
+                    Acceleration += new Vector3(0, -0.00981f, 0);
+
+                if (WorldPosition.Y < 0.5f && WorldPosition.Y != 0)
+                {
+                    //Sets the Vertical Acceleration to 0
+                    Acceleration = new Vector3(Acceleration.X, 0, Acceleration.Z);
+                    //Set their position to be on the Ground
+                    SetTranslation(WorldPosition.X, 0.5f, WorldPosition.Z);
+                    //Declare them grounded
+                    IsActorGrounded = true;
+                }
+                else
+                    //They are not grounded
+                    IsActorGrounded = false;
             }
-            else
-                //They are not grounded
-                IsActorGrounded = false;
         }
 
         public override void Draw()
@@ -214,20 +258,19 @@ namespace MathForGames
 
         public override void OnCollision(Actor actor)
         {
-            if (actor is Enemy)
+            if (actor is Enemy && WorldPosition.Y != 0 && !IsTagger)
             {
-                Translate(-Velocity.X, 0, -Velocity.Z);
-                Enemy enemy = (Enemy)actor;
-                if (enemy.IsTagger && !IsTagger)
-                {
-                    IsTagger = true;
-                }
-                if (!enemy.IsTagger && IsTagger)
-                {
-                    IsTagger = false;
-                }
+                SceneManager.CurrentScene.RemoveActor(this);
+                SceneManager.RemoveAlly(this);
             }
-                
+            else if (actor is Wall && WorldPosition.Y != 0)
+            {
+                Translate(-Forward.X * 2, 0, -Forward.Z * 2);
+                Forward = new Vector3(-Forward.X, 0, -Forward.Z);
+            }
+
+            else if (actor is PowerUp && WorldPosition.Y != 0)
+                _hasPowerUp = true;
         }
     }
 }

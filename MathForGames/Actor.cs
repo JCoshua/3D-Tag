@@ -116,8 +116,8 @@ namespace MathForGames
         public Vector3 WorldPosition
         {
             //Return the Global Transforms T Column
-            get { return new Vector3 (GlobalTransform.M03, GlobalTransform.M13, GlobalTransform.M23); }
-            set 
+            get { return new Vector3(GlobalTransform.M03, GlobalTransform.M13, GlobalTransform.M23); }
+            set
             {
                 //If the actor has a Parent
                 if (Parent != null)
@@ -147,12 +147,12 @@ namespace MathForGames
         /// </summary>
         public Vector3 Size
         {
-            get 
+            get
             {
                 float xScale = new Vector3(_scale.M00, _scale.M01, _scale.M20).Magnitude;
                 float yScale = new Vector3(_scale.M01, _scale.M11, _scale.M21).Magnitude;
                 float zScale = new Vector3(_scale.M02, _scale.M12, _scale.M22).Magnitude;
-                return new Vector3(xScale, yScale, zScale); 
+                return new Vector3(xScale, yScale, zScale);
             }
             set { SetScale(value.X, value.Y, value.Z); }
         }
@@ -175,7 +175,7 @@ namespace MathForGames
         }
 
         public Actor(float x, float y, float z, string name = "Actor", Shape shape = Shape.NONE) :
-            this(new Vector3 { X = x, Y = y, Z = z}, name, shape)
+            this(new Vector3 { X = x, Y = y, Z = z }, name, shape)
         { }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace MathForGames
         public void UpdateTransforms()
         {
             if (Parent != null)
-                GlobalTransform = Parent.LocalTransform * LocalTransform;
-            else 
+                GlobalTransform = Parent.GlobalTransform * LocalTransform;
+            else
                 GlobalTransform = LocalTransform;
         }
 
@@ -244,7 +244,7 @@ namespace MathForGames
                 //Removes the child from the actor
                 child.Parent = null;
             }
-            
+
             return actorRemoved;
         }
 
@@ -260,7 +260,8 @@ namespace MathForGames
             LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
 
-            
+            if (Collider != null)
+                Collider.Update();
         }
 
         public virtual void Draw()
@@ -279,8 +280,8 @@ namespace MathForGames
 
             if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
             {
-                if (_shape != Shape.NONE)
-                Collider.Draw();
+                if (Collider != null)
+                    Collider.Draw();
             }
         }
 
@@ -306,10 +307,8 @@ namespace MathForGames
         /// <returns>True if the distance between the two actors is less than their combined radii</returns>
         public virtual bool CheckCollision(Actor other)
         {
-            if (Parent == other.Parent && Parent != null)
-                return false;
             //Returns false if there is a null collider
-            if (Collider == null || other.Collider == null)
+            if (this.Collider == null || other.Collider == null)
                 return false;
 
             return Collider.CheckCollision(other);
@@ -369,7 +368,7 @@ namespace MathForGames
             Matrix4 rotationY = Matrix4.CreateRotationY(radiansY);
             Matrix4 rotationZ = Matrix4.CreateRotationZ(radiansZ);
             _rotation = rotationX * rotationY * rotationZ;
-            
+
         }
 
         /// <summary>

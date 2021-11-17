@@ -130,6 +130,7 @@ namespace MathForGames
             if (other.Owner == Owner)
                 return false;
 
+            CollisionNormal = (other.Owner.WorldPosition - Owner.WorldPosition).Normalized;
             //Returns True if there is an overlap betweens the two colliders
             return other.Left <= Right &&
                    other.Bottom <= Top &&

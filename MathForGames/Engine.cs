@@ -55,6 +55,9 @@ namespace MathForGames
             End();
         }
 
+        /// <summary>
+        /// Initializes that Camera
+        /// </summary>
         private void InitializeCamera()
         {
             //Camera's Position
@@ -62,7 +65,6 @@ namespace MathForGames
             //Camera's Up Vector (rotation towards target)
             //The Field of View on the Y Axis (Zoom)
             //The Camera's mode type
-            _camera = new Camera(new Camera3D(), new System.Numerics.Vector3(0, 10, 10), new System.Numerics.Vector3(0, 0, 0), new System.Numerics.Vector3(0, 1, 0), 45, CameraProjection.CAMERA_PERSPECTIVE);
         }
         /// <summary>
         /// Called when the application starts
@@ -75,7 +77,7 @@ namespace MathForGames
             //Create a window using RayLib
             Raylib.InitWindow(800, 450, "Math For Games");
             Raylib.SetTargetFPS(60);
-            InitializeCamera();
+            _camera = new Camera(new Camera3D(), new System.Numerics.Vector3(0, 10, 10), new System.Numerics.Vector3(0, 0, 0), new System.Numerics.Vector3(0, 1, 0), 45, CameraProjection.CAMERA_PERSPECTIVE);
 
             Scene scene = new Scene("Arena");
             AddScene(scene);

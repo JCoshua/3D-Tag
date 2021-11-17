@@ -11,7 +11,7 @@ namespace MathForGames
         /// An Array containing all actors in a scene
         /// </summary>
         private static Actor[] _actors;
-        private static Actor[] _UIElements;
+        private static UIText[] _UIElements;
         private string _name;
 
         public static Actor[] Actors
@@ -27,7 +27,7 @@ namespace MathForGames
         {
             _name = name;
             _actors = new Actor[0];
-            _UIElements = new Actor[0];
+            _UIElements = new UIText[0];
         }
 
         /// <summary>
@@ -124,10 +124,10 @@ namespace MathForGames
         /// Adds an UI to the scenes list of UI Elements
         /// </summary>
         /// <param name="actor"></param>
-        public void AddUIElement(Actor UI)
+        public void AddUIElement(UIText UI)
         {
             //Creates a temp array larger than the original
-            Actor[] tempArray = new Actor[_UIElements.Length + 1];
+            UIText[] tempArray = new UIText[_UIElements.Length + 1];
 
             //Copies all values from the orginal array into the temp array
             for (int i = 0; i < _UIElements.Length; i++)
@@ -167,8 +167,19 @@ namespace MathForGames
 
             //Merges the arrays
             if (actorRemoved)
-                _actors = tempArray;
-
+            {
+                Actor[] childArray = new Actor[tempArray.Length - actor.Children.Length];
+                j = 0;
+                for (int i = 0; i < tempArray.Length; i++)
+                {
+                        if (tempArray[i].Parent != actor)
+                        {
+                            childArray[j] = tempArray[i];
+                            j++;
+                        }
+                }
+                _actors = childArray;
+            }
             return actorRemoved;
         }
 
@@ -177,19 +188,19 @@ namespace MathForGames
         /// </summary>
         /// <param name="actor">The actor to remove</param>
         /// <returns>If the removal was successful</returns>
-        public bool RemoveUIElement(Actor UI)
+        public bool RemoveUIElement(UIText actor)
         {
             //Creates a variable to store if the removal was successful
             bool actorRemoved = false;
 
             //Creates a new rray that is smaller than the original
-            Actor[] tempArray = new Actor[_UIElements.Length - 1];
+            UIText[] tempArray = new UIText[_UIElements.Length - 1];
 
             //Copies all values from the orginal array into the temp array unless it is the removed actor
             int j = 0;
             for (int i = 0; i < _UIElements.Length; i++)
             {
-                if (_actors[i] != UI)
+                if (_UIElements[i] != actor)
                 {
                     tempArray[j] = _UIElements[i];
                     j++;
@@ -198,10 +209,11 @@ namespace MathForGames
                     actorRemoved = true;
             }
 
-            //Merges the arrays
             if (actorRemoved)
+            {
+                //Merges the Arrays
                 _UIElements = tempArray;
-
+            }
             return actorRemoved;
         }
 

@@ -24,8 +24,8 @@ namespace MathForGames
         /// <param name="width">The length of the text box</param>
         /// <param name="height">the width</param>
         /// <param name="text">the text within the box</param>
-        public UIText(float x, float y, float z, string name, Color color, int width, int height, int fontSize, string text = "", Shape shape = Shape.SPHERE)
-            : base(x, y, z, name, shape)
+        public UIText(float x, float y, float z, string name, Color color, int width, int height, int fontSize, string text = "")
+            : base(x, y, z, name)
         {
             Text = text;
             Width = width;
@@ -35,15 +35,56 @@ namespace MathForGames
             FontColor = color;
         }
 
-        public override void Update(float DeltaTime)
+        public override void Update(float deltaTime)
         {
+            if (Name == "Timer")
+            {
+                Text = "Time: " + (int)SceneManager.TimeLeft;
+                if(SceneManager.TimeLeft <= 0 && SceneManager.Allies[0].IsTagger && !SceneManager.GameOver)
+                {
+                    SceneManager.CurrentScene.RemoveUIElement(this);
+                    UIText lose = new UIText(120, 100, 50, "Lose", Color.BLACK, 400, 400, 50, "You Lose");
+                    SceneManager.CurrentScene.AddUIElement(lose);
+                    SceneManager.GameOver = true;
+                }
+                else if(SceneManager.TimeLeft <= 0 && !SceneManager.Allies[0].IsTagger && !SceneManager.GameOver)
+                {
+                    SceneManager.CurrentScene.RemoveUIElement(this);
+                    UIText win = new UIText(120, 100, 50, "Win", Color.BLACK, 400, 400, 50, "You Win");
+                    SceneManager.CurrentScene.AddUIElement(win);
+                    SceneManager.GameOver = true;
+                }
+            }
+            else if(Name == "Team Remaining")
+            {
+                if(SceneManager.Allies[0].IsTagger)
+                    Text = SceneManager.Enemies.Length + " Remaining!";
+                else
+                    Text = Text = SceneManager.Allies.Length + " Remaining!";
 
+                if (SceneManager.Allies.Length <= 0 && !SceneManager.GameOver)
+                {
+                    SceneManager.CurrentScene.RemoveUIElement(this);
+                    UIText lose = new UIText(120, 100, 50, "Lose", Color.BLACK, 400, 400, 50, "You Lose");
+                    SceneManager.CurrentScene.AddUIElement(lose);
+                    SceneManager.TimeLeft = 0;
+                    SceneManager.GameOver = true;
+                }
+                else if(SceneManager.Enemies.Length <= 0 && !SceneManager.GameOver)
+                {
+                    SceneManager.CurrentScene.RemoveUIElement(this);
+                    UIText win = new UIText(120, 100, 50, "Win", Color.BLACK, 400, 400, 50, "You Win");
+                    SceneManager.CurrentScene.AddUIElement(win);
+                    SceneManager.TimeLeft = 0;
+                    SceneManager.GameOver = true;
+                }
+            }
+            base.Update(deltaTime);
         }
 
         public override void Draw()
         {
             Rectangle textBox = new Rectangle(LocalPosition.X, LocalPosition.Y, Width, Height);
-            Raylib.DrawRectangleRec(textBox, Color.BEIGE);
             Raylib.DrawTextRec(Font, Text, textBox, FontSize, 1, true, FontColor);
         }
     }
