@@ -47,7 +47,7 @@ namespace MathForGames
 
             Actor body = new Actor(0, 0, 0, "Body", Shape.CUBE);
             body.SetScale(0.75f, 1, 0.75f);
-            body.Collider = new AABBCollider(body);
+            Collider = new AABBCollider(this);
             body.SetColor(255, 10, 10, 255);
             AddChild(body);
 

@@ -130,16 +130,6 @@ namespace MathForGames
             if (other.Owner == Owner)
                 return false;
 
-            Vector3 direction = Owner.WorldPosition - other.Owner.WorldPosition;
-
-            //Clamps the direction to be within the AABB Collider
-            direction.X = Math.Clamp(direction.X, -other.Width / 2, other.Width / 2);
-            direction.Y = Math.Clamp(direction.Y, -other.Height / 2, other.Height / 2);
-            direction.Z = Math.Clamp(direction.Z, -other.Length / 2, other.Length / 2);
-
-            //Finds the closest point by adding the direction vector to the AABB Center
-            Vector3 closestPoint = other.Owner.WorldPosition + direction;
-
             CollisionNormal = (other.Owner.WorldPosition - Owner.WorldPosition).Normalized;
 
             //Returns True if there is an overlap betweens the two colliders

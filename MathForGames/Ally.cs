@@ -12,6 +12,8 @@ namespace MathForGames
         private Vector3 _velocity;
         private Enemy _target;
         private bool _isTagger = false;
+        private bool _hasPowerUp = false;
+        private float powerUpTimer = 0f;
 
         public float Speed
         {
@@ -48,7 +50,7 @@ namespace MathForGames
 
             Actor body = new Actor(0, 0, 0, "Body", Shape.CUBE);
             body.SetScale(0.75f, 1, 0.75f);
-            body.Collider = new AABBCollider(body);
+            Collider = new AABBCollider(0.75f, 1, 0.75f, this);
             body.SetColor(10, 10, 255, 255);
             AddChild(body);
 
@@ -100,6 +102,19 @@ namespace MathForGames
                 }
             }
 
+            if(_hasPowerUp)
+            {
+                powerUpTimer += deltaTime;
+                if(powerUpTimer >= 10)
+                {
+                    SetScale(1, 1, 1);
+                    Children[0].SetScale(1, 1, 1);
+                    Children[1].SetScale(0.5f, 0.5f, 0.5f);
+                    Children[1].SetColor(255, 100, 100, 255);
+                    Children[2].SetScale(0.75f, 1, 0.75f);
+                    Children[2].SetColor(10, 10, 255, 255);
+                }
+            }
 
             if (!IsActorGrounded)
                 Acceleration += new Vector3(0, -0.00981f, 0);
@@ -219,15 +234,16 @@ namespace MathForGames
                 {
                     IsTagger = true;
                 }
-                if (!enemy.IsTagger && IsTagger)
+                else if (!enemy.IsTagger && IsTagger)
                 {
                     IsTagger = false;
                 }
             }
-            //else if(actor is Wall)
-            //{
-            //    Translate(-Collider.CollisionNormal.X * Speed, 0, -Collider.CollisionNormal.Z * Speed);
-            //}
+            else if (actor is Wall)
+                Translate(-Collider.CollisionNormal.X * 5, 0, -Collider.CollisionNormal.Z * 5);
+
+            else if (actor is PowerUp)
+                _hasPowerUp = true;
         }
     }
 }

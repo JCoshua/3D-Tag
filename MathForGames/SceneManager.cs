@@ -83,20 +83,20 @@ namespace MathForGames
             player.AddChild(camera);
             Engine.Camera.CameraTarget = camera;
 
-            //Ally ally = new Ally(10, 0.5f, 15, 20, "James");
-            //AddAlly(ally);
-            //ally.Collider = new AABBCollider(ally);
-            //_currentScene.AddActor(ally);
+            Ally ally = new Ally(10, 0.5f, 15, 20, "James");
+            AddAlly(ally);
+            ally.Collider = new AABBCollider(ally);
+            _currentScene.AddActor(ally);
 
-            //Enemy enemy = new Enemy(-25, 1, 25, 20, "Charles");
-            //AddEnemy(enemy);
-            //enemy.Collider = new AABBCollider(enemy);
-            //_currentScene.AddActor(enemy);
+            Enemy enemy = new Enemy(-25, 1, 25, 20, "Charles");
+            AddEnemy(enemy);
+            enemy.Collider = new AABBCollider(enemy);
+            _currentScene.AddActor(enemy);
 
-            //Enemy enemy2 = new Enemy(-25, 1, 15, 20, "Jeffery");
-            //AddEnemy(enemy2);
-            //enemy2.Collider = new AABBCollider(enemy2);
-            //_currentScene.AddActor(enemy2);
+            Enemy enemy2 = new Enemy(-25, 1, 15, 20, "Jeffery");
+            AddEnemy(enemy2);
+            enemy2.Collider = new AABBCollider(enemy2);
+            _currentScene.AddActor(enemy2);
 
             Actor floor = new Actor(0, -0.251f, 0, "Floor", Shape.CUBE);
             floor.SetScale(500, 0.5f, 500);
@@ -104,51 +104,60 @@ namespace MathForGames
             floor.SetColor(Color.DARKGREEN);
             _currentScene.AddActor(floor);
 
+            Wall westWall = new Wall(5, 0, 0, 10, 10, 325, CurrentScene);
+
+            Wall eastWall = new Wall(-5, 0, 0, 10, 10, 325, CurrentScene);
+
+            Wall northtWall = new Wall(0, 0, 5, 325, 10, 10, CurrentScene);
+
+            Wall southtWall = new Wall(0, 0, -5, 325, 10, 10, CurrentScene);
+
             Wall wall = new Wall(0.65f, 0, 0, 1, 10, 1, CurrentScene);
 
-            //Wall wall2 = new Wall(0.85f, 0, 0, 1, 10, 1, CurrentScene);
+            Wall wall2 = new Wall(0.85f, 0, 0, 1, 10, 1, CurrentScene);
 
-            //Wall wall3 = new Wall(0.65f, 0, 0.2f, 1, 10, 1, CurrentScene);
+            Wall wall3 = new Wall(0.65f, 0, 0.2f, 1, 10, 1, CurrentScene);
 
-            //Wall wall4 = new Wall(0.85f, 0, 0.2f, 1, 10, 1, CurrentScene);
+            Wall wall4 = new Wall(0.85f, 0, 0.2f, 1, 10, 1, CurrentScene);
 
-            //Wall wall5 = new Wall(24, 7.8f, 3, 10, 0.5f, 10, CurrentScene);
+            Wall wall5 = new Wall(24, 7.8f, 3, 10, 0.5f, 10, CurrentScene);
 
-            //Wall wall6 = new Wall(0.45f, 0, 0, 1, 7.5f, 1, CurrentScene);
+            Wall wall6 = new Wall(0.45f, 0, 0, 1, 7.5f, 1, CurrentScene);
 
-            //Wall wall7 = new Wall(0.75f, 0, 0, 1, 7.5f, 1, CurrentScene);
+            Wall wall7 = new Wall(0.75f, 0, 0, 1, 7.5f, 1, CurrentScene);
 
-            //Wall wall8 = new Wall(0.45f, 0, 0.3f, 1, 7.5f, 1, CurrentScene);
+            Wall wall8 = new Wall(0.45f, 0, 0.3f, 1, 7.5f, 1, CurrentScene);
 
-            //Wall wall9 = new Wall(0.75f, 0, 0.3f, 1, 7.5f, 1, CurrentScene);
+            Wall wall9 = new Wall(0.75f, 0, 0.3f, 1, 7.5f, 1, CurrentScene);
 
-            //Wall wall10 = new Wall(7, 5.8f, 3, 5, 0.5f, 5, CurrentScene);
+            Wall wall10 = new Wall(7, 5.8f, 3, 5, 0.5f, 5, CurrentScene);
 
-            //Wall wall11 = new Wall(10, 0, 1, 100, 10, 10, CurrentScene);
+            PowerUp ScaleUp = new PowerUp(50, 1, 50, ItemType.SIZEUP);
+            ScaleUp.Collider = new AABBCollider(ScaleUp);
+            _currentScene.AddActor(ScaleUp);
 
-            //PowerUp ScaleUp = new PowerUp(50, 1, 50, ItemType.SIZEUP);
-            //_currentScene.AddActor(ScaleUp);
-            //while (taggers > 0)
-            //{
-            //    for (int i = 0; i < Enemies.Length; i++)
-            //    {
-            //        int randomTag = new Random().Next(0, 2);
-            //        if(randomTag == 1 && !Enemies[i].IsTagger && taggers > 0)
-            //        {
-            //            Enemies[i].IsTagger = true;
-            //            taggers--;
-            //        }
-            //    }
-            //    for (int i = 0; i < Allies.Length; i++)
-            //    {
-            //        int randomTag = new Random().Next(0, 2);
-            //        if (randomTag == 1 && !Allies[i].IsTagger && taggers > 0)
-            //        {
-            //            Allies[i].IsTagger = true;
-            //            taggers--;
-            //        }
-            //    }
-            //}
+
+            while (taggers > 0)
+            {
+                for (int i = 0; i < Enemies.Length; i++)
+                {
+                    int randomTag = new Random().Next(0, 2);
+                    if (randomTag == 1 && !Enemies[i].IsTagger && taggers > 0)
+                    {
+                        Enemies[i].IsTagger = true;
+                        taggers--;
+                    }
+                }
+                for (int i = 0; i < Allies.Length; i++)
+                {
+                    int randomTag = new Random().Next(0, 2);
+                    if (randomTag == 1 && !Allies[i].IsTagger && taggers > 0)
+                    {
+                        Allies[i].IsTagger = true;
+                        taggers--;
+                    }
+                }
+            }
 
         }
 

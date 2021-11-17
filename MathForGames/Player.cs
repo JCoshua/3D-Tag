@@ -42,12 +42,6 @@ namespace MathForGames
 
         public override void OnCollision(Actor other)
         {
-            if(other is Wall)
-            {
-                Console.WriteLine("Collision Normal: " + Collider.CollisionNormal.X + ", " + Collider.CollisionNormal.Y + ", " + Collider.CollisionNormal.Z);
-            }
-
-
             base.OnCollision(other);
         }
     }

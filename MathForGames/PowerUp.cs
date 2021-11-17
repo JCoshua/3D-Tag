@@ -48,11 +48,29 @@ namespace MathForGames
             switch(_itemType)
             {
                 case ItemType.SIZEUP:
-                    Actor sprite = new Actor(1, 0, 0, "Sprite", Shape.CUBE);
+                    Actor sprite = new Actor(0, 0, 0, "Sprite", Shape.CUBE);
                     sprite.SetScale(0.5f, 0.5f, 0.5f);
                     sprite.SetColor(20, 0, 0, 255);
                     sprite.Collider = new AABBCollider(sprite);
                     AddChild(sprite);
+                    break;
+            }
+        }
+
+        public override void OnCollision(Actor actor)
+        {
+            if(actor.Parent != null)
+                return;
+
+            switch (_itemType)
+            {
+                case ItemType.SIZEUP:
+                    actor.Scale(2);
+                    for(int i = 0; i < actor.Children.Length; i++)
+                    {
+                        actor.Children[i].Scale(2);
+                    }
+                    SceneManager.CurrentScene.RemoveActor(this);
                     break;
             }
         }

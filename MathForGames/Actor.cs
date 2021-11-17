@@ -259,6 +259,9 @@ namespace MathForGames
             Translate(Acceleration);
             LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
+
+            if(Collider != null)
+            Collider.Update();
         }
 
         public virtual void Draw()
@@ -277,7 +280,7 @@ namespace MathForGames
 
             if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
             {
-                if (_shape != Shape.NONE)
+                if (Collider != null)
                 Collider.Draw();
             }
         }
@@ -295,11 +298,6 @@ namespace MathForGames
                 Acceleration = new Vector3(0, 0, 0);
                 WorldPosition = new Vector3(WorldPosition.X, 0.5f, WorldPosition.Z);
             }
-
-            if (actor is Wall && Parent != null)
-            {
-                Parent.OnCollision(actor);
-            }
         }
 
         /// <summary>
@@ -310,7 +308,7 @@ namespace MathForGames
         public virtual bool CheckCollision(Actor other)
         {
             //Returns false if there is a null collider
-            if (Collider == null || other.Collider == null)
+            if (this.Collider == null || other.Collider == null)
                 return false;
 
             return Collider.CheckCollision(other);
