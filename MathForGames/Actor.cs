@@ -185,7 +185,11 @@ namespace MathForGames
         {
             if (Parent != null)
                 GlobalTransform = Parent.GlobalTransform * LocalTransform;
+<<<<<<< HEAD
             else
+=======
+            else 
+>>>>>>> RayLib3D
                 GlobalTransform = LocalTransform;
         }
 
@@ -260,8 +264,13 @@ namespace MathForGames
             LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
 
+<<<<<<< HEAD
             if (Collider != null)
                 Collider.Update();
+=======
+            if(Collider != null)
+            Collider.Update();
+>>>>>>> RayLib3D
         }
 
         public virtual void Draw()
@@ -281,7 +290,11 @@ namespace MathForGames
             if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
             {
                 if (Collider != null)
+<<<<<<< HEAD
                     Collider.Draw();
+=======
+                Collider.Draw();
+>>>>>>> RayLib3D
             }
         }
 

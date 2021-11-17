@@ -35,6 +35,7 @@ namespace MathForGames
         /// </summary>
         public virtual void Start()
         {
+
         }
 
         /// <summary>
@@ -166,6 +167,7 @@ namespace MathForGames
             }
 
             //Merges the arrays
+<<<<<<< HEAD
             if (actorRemoved)
             {
                 Actor[] childArray = new Actor[tempArray.Length - actor.Children.Length];
@@ -180,6 +182,25 @@ namespace MathForGames
                 }
                 _actors = childArray;
             }
+=======
+            if (actorRemoved)
+            {
+                Actor[] childArray = new Actor[tempArray.Length - actor.Children.Length];
+                j = 0;
+                for (int i = 0; i < tempArray.Length; i++)
+                {
+                    for(int c = 0;c<actor.Children.Length;c++)
+                        if (tempArray[i] != actor.Children[c])
+                        {
+                            childArray[j] = tempArray[i];
+                            j++;
+                        }
+                }
+                _actors = childArray;
+            }
+                
+
+>>>>>>> RayLib3D
             return actorRemoved;
         }
 

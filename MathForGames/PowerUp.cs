@@ -11,6 +11,10 @@ namespace MathForGames
         GHOST,
         SPEEDUP,
         SPEEDDOWN,
+<<<<<<< HEAD
+=======
+        SHEILD
+>>>>>>> RayLib3D
     }
 
     class PowerUp : Actor
@@ -37,6 +41,7 @@ namespace MathForGames
                     else if (Children[0].Size.Y >= 1)
                         Children[0].SetScale(0.5f, 0.5f, 0.5f);
                     break;
+<<<<<<< HEAD
                 case ItemType.SIZEDOWN:
                     if (Children[0].Size.Y >= 0.5f)
                         Children[0].Scale(0.975f);
@@ -51,6 +56,8 @@ namespace MathForGames
                     break;
                 default:
                     break;
+=======
+>>>>>>> RayLib3D
             }
 
             base.Update(deltaTime);
@@ -58,7 +65,11 @@ namespace MathForGames
 
         public void CreateSprite()
         {
+<<<<<<< HEAD
             switch (_itemType)
+=======
+            switch(_itemType)
+>>>>>>> RayLib3D
             {
                 case ItemType.SIZEUP:
                     Actor sprite = new Actor(0, 0, 0, "Sprite", Shape.CUBE);
@@ -67,6 +78,7 @@ namespace MathForGames
                     sprite.Collider = new AABBCollider(sprite);
                     AddChild(sprite);
                     break;
+<<<<<<< HEAD
                 case ItemType.SIZEDOWN:
                     sprite = new Actor(0, 0, 0, "Sprite", Shape.CUBE);
                     sprite.SetScale(1, 1, 1);
@@ -168,6 +180,26 @@ namespace MathForGames
                         enemy.Speed = 10;
                     }
                     break;
+=======
+            }
+        }
+
+        public override void OnCollision(Actor actor)
+        {
+            if(actor.Parent != null)
+                return;
+
+            switch (_itemType)
+            {
+                case ItemType.SIZEUP:
+                    actor.Scale(2);
+                    for(int i = 0; i < actor.Children.Length; i++)
+                    {
+                        actor.Children[i].Scale(2);
+                    }
+                    SceneManager.CurrentScene.RemoveActor(this);
+                    break;
+>>>>>>> RayLib3D
             }
         }
     }

@@ -29,9 +29,9 @@ namespace MathForGames
             Velocity = moveDirection.Normalized * Speed * deltaTime;
 
             Rotate(0, zRotation * deltaTime, 0);
-            Translate(Velocity.X, Velocity.Y * 5, Velocity.Z);
+            Translate(Velocity.X, Velocity.Y, Velocity.Z);
 
-            
+            if(Size.Y < 10)
             base.Update(deltaTime);
         }
 
@@ -40,8 +40,9 @@ namespace MathForGames
             base.Draw();
         }
 
-        public override void OnCollision(Actor actor)
+        public override void OnCollision(Actor other)
         {
+<<<<<<< HEAD
             if (actor is Enemy && WorldPosition.Y != 0 && !IsTagger)
             {
                 SceneManager.CurrentScene.RemoveActor(this);
@@ -56,6 +57,9 @@ namespace MathForGames
 
             else if (actor is PowerUp && WorldPosition.Y != 0)
                 HasPowerUp = true;
+=======
+            base.OnCollision(other);
+>>>>>>> RayLib3D
         }
     }
 }

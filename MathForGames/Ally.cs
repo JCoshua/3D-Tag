@@ -13,7 +13,11 @@ namespace MathForGames
         private Enemy _target;
         private bool _isTagger = false;
         private bool _hasPowerUp = false;
+<<<<<<< HEAD
         private float _powerUpTimer = 0;
+=======
+        private float powerUpTimer = 0f;
+>>>>>>> RayLib3D
 
         public float Speed
         {
@@ -55,7 +59,11 @@ namespace MathForGames
 
             Actor body = new Actor(0, 0, 0, "Body", Shape.CUBE);
             body.SetScale(0.75f, 1, 0.75f);
+<<<<<<< HEAD
             Collider = new AABBCollider(this);
+=======
+            Collider = new AABBCollider(0.75f, 1, 0.75f, this);
+>>>>>>> RayLib3D
             body.SetColor(10, 10, 255, 255);
             AddChild(body);
 
@@ -146,9 +154,27 @@ namespace MathForGames
                     _powerUpTimer = 0;
                     _hasPowerUp = false;
                 }
+<<<<<<< HEAD
 
                 if (!IsActorGrounded)
                     Acceleration += new Vector3(0, -0.00981f, 0);
+=======
+            }
+
+            if(_hasPowerUp)
+            {
+                powerUpTimer += deltaTime;
+                if(powerUpTimer >= 10)
+                {
+                    SetScale(1, 1, 1);
+                    Children[0].SetScale(1, 1, 1);
+                    Children[1].SetScale(0.5f, 0.5f, 0.5f);
+                    Children[1].SetColor(255, 100, 100, 255);
+                    Children[2].SetScale(0.75f, 1, 0.75f);
+                    Children[2].SetColor(10, 10, 255, 255);
+                }
+            }
+>>>>>>> RayLib3D
 
                 if (WorldPosition.Y < 0.5f && WorldPosition.Y != 0)
                 {
@@ -260,6 +286,7 @@ namespace MathForGames
         {
             if (actor is Enemy && WorldPosition.Y != 0 && !IsTagger)
             {
+<<<<<<< HEAD
                 SceneManager.CurrentScene.RemoveActor(this);
                 SceneManager.RemoveAlly(this);
             }
@@ -270,6 +297,23 @@ namespace MathForGames
             }
 
             else if (actor is PowerUp && WorldPosition.Y != 0)
+=======
+                Translate(Collider.CollisionNormal);
+                Enemy enemy = (Enemy)actor;
+                if (enemy.IsTagger && !IsTagger)
+                {
+                    IsTagger = true;
+                }
+                else if (!enemy.IsTagger && IsTagger)
+                {
+                    IsTagger = false;
+                }
+            }
+            else if (actor is Wall)
+                Translate(-Collider.CollisionNormal.X * 5, 0, -Collider.CollisionNormal.Z * 5);
+
+            else if (actor is PowerUp)
+>>>>>>> RayLib3D
                 _hasPowerUp = true;
         }
     }

@@ -97,6 +97,7 @@ namespace MathForGames
             ally.Collider = new AABBCollider(ally);
             _currentScene.AddActor(ally);
 
+<<<<<<< HEAD
             Ally ally2 = new Ally(6, 0.5f, -5, 10, "Emma");
             AddAlly(ally2);
             ally2.Collider = new AABBCollider(ally2);
@@ -113,11 +114,18 @@ namespace MathForGames
             _currentScene.AddActor(ally4);
 
             Enemy enemy = new Enemy(0, 1, 5, 10, "Charles");
+=======
+            Enemy enemy = new Enemy(-25, 1, 25, 20, "Charles");
+>>>>>>> RayLib3D
             AddEnemy(enemy);
             enemy.Collider = new AABBCollider(enemy);
             _currentScene.AddActor(enemy);
 
+<<<<<<< HEAD
             Enemy enemy2 = new Enemy(3, 1, 5, 10, "Jeffery");
+=======
+            Enemy enemy2 = new Enemy(-25, 1, 15, 20, "Jeffery");
+>>>>>>> RayLib3D
             AddEnemy(enemy2);
             enemy2.Collider = new AABBCollider(enemy2);
             _currentScene.AddActor(enemy2);
@@ -143,6 +151,7 @@ namespace MathForGames
             floor.SetColor(Color.DARKGREEN);
             _currentScene.AddActor(floor);
 
+<<<<<<< HEAD
             Wall westWall = new Wall(75, 0, 0, 10, 10, 300, CurrentScene);
             Wall eastWall = new Wall(-75, 0, 0, 10, 10, 300, CurrentScene);
             Wall northWall = new Wall(0, 0, 75, 300, 10, 10, CurrentScene);
@@ -189,9 +198,44 @@ namespace MathForGames
 
             UIText timer = new UIText(177, 0, 0, "Timer", Color.WHITE, 100, 40, 20, "Time: " + TimeLeft);
             _currentScene.AddUIElement(timer);
+=======
+            Wall westWall = new Wall(5, 0, 0, 10, 10, 325, CurrentScene);
+
+            Wall eastWall = new Wall(-5, 0, 0, 10, 10, 325, CurrentScene);
+
+            Wall northtWall = new Wall(0, 0, 5, 325, 10, 10, CurrentScene);
+
+            Wall southtWall = new Wall(0, 0, -5, 325, 10, 10, CurrentScene);
+
+            Wall wall = new Wall(0.65f, 0, 0, 1, 10, 1, CurrentScene);
+
+            Wall wall2 = new Wall(0.85f, 0, 0, 1, 10, 1, CurrentScene);
+
+            Wall wall3 = new Wall(0.65f, 0, 0.2f, 1, 10, 1, CurrentScene);
+
+            Wall wall4 = new Wall(0.85f, 0, 0.2f, 1, 10, 1, CurrentScene);
+
+            Wall wall5 = new Wall(24, 7.8f, 3, 10, 0.5f, 10, CurrentScene);
+
+            Wall wall6 = new Wall(0.45f, 0, 0, 1, 7.5f, 1, CurrentScene);
+
+            Wall wall7 = new Wall(0.75f, 0, 0, 1, 7.5f, 1, CurrentScene);
+
+            Wall wall8 = new Wall(0.45f, 0, 0.3f, 1, 7.5f, 1, CurrentScene);
+
+            Wall wall9 = new Wall(0.75f, 0, 0.3f, 1, 7.5f, 1, CurrentScene);
+
+            Wall wall10 = new Wall(7, 5.8f, 3, 5, 0.5f, 5, CurrentScene);
+
+            PowerUp ScaleUp = new PowerUp(50, 1, 50, ItemType.SIZEUP);
+            ScaleUp.Collider = new AABBCollider(ScaleUp);
+            _currentScene.AddActor(ScaleUp);
+
+>>>>>>> RayLib3D
 
             if (randomTag == 0)
             {
+<<<<<<< HEAD
                 UIText blueTeam = new UIText(0, 0, 0, "Blue Team", Color.BLUE, 100, 20, 10, "Run!");
                 UIText redTeam = new UIText(389, 0, 0, "Red Team", Color.RED, 100, 20, 10, "Tag!");
                 UIText teamRemaining = new UIText(185, 220, 0, "Team Remaining", Color.BLUE, 100, 20, 10, "5 Left!");
@@ -207,6 +251,26 @@ namespace MathForGames
                 _currentScene.AddUIElement(blueTeam);
                 _currentScene.AddUIElement(redTeam);
                 _currentScene.AddUIElement(teamRemaining);
+=======
+                for (int i = 0; i < Enemies.Length; i++)
+                {
+                    int randomTag = new Random().Next(0, 2);
+                    if (randomTag == 1 && !Enemies[i].IsTagger && taggers > 0)
+                    {
+                        Enemies[i].IsTagger = true;
+                        taggers--;
+                    }
+                }
+                for (int i = 0; i < Allies.Length; i++)
+                {
+                    int randomTag = new Random().Next(0, 2);
+                    if (randomTag == 1 && !Allies[i].IsTagger && taggers > 0)
+                    {
+                        Allies[i].IsTagger = true;
+                        taggers--;
+                    }
+                }
+>>>>>>> RayLib3D
             }
         }
 

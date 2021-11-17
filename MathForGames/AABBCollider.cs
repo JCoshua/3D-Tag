@@ -131,6 +131,10 @@ namespace MathForGames
                 return false;
 
             CollisionNormal = (other.Owner.WorldPosition - Owner.WorldPosition).Normalized;
+<<<<<<< HEAD
+=======
+
+>>>>>>> RayLib3D
             //Returns True if there is an overlap betweens the two colliders
             return other.Left <= Right &&
                    other.Bottom <= Top &&
