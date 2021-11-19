@@ -31,7 +31,7 @@ namespace MathForGames
         }
 
         /// <summary>
-        /// The size of the collider on the y axis
+        /// The size of the collider on the z axis
         /// </summary>
         public float Length
         {
@@ -40,25 +40,19 @@ namespace MathForGames
         }
 
         /// <summary>
-        /// The furthest Left X value of this collider
+        /// The Lowest X Value of this collider
         /// </summary>
         public float Left
         {
-            get
-            {
-                return Owner.LocalPosition.X - (Width / 2);
-            }
+            get { return Owner.LocalPosition.X - (Width / 2); }
         }
 
         /// <summary>
-        /// The furthest right X value of this collider
+        /// The Highest X Value of this collider
         /// </summary>
         public float Right
         {
-            get
-            {
-                return Owner.LocalPosition.X + (Width / 2);
-            }
+            get { return Owner.LocalPosition.X + (Width / 2); }
         }
 
         /// <summary>
@@ -66,10 +60,7 @@ namespace MathForGames
         /// </summary>
         public float Top
         {
-            get
-            {
-                return Owner.LocalPosition.Y + (Height / 2);
-            }
+            get { return Owner.LocalPosition.Y + (Height / 2); }
         }
 
         /// <summary>
@@ -77,34 +68,32 @@ namespace MathForGames
         /// </summary>
         public float Bottom
         {
-            get
-            {
-                return Owner.LocalPosition.Y - (Height / 2);
-            }
+            get{ return Owner.LocalPosition.Y - (Height / 2); }
         }
 
         /// <summary>
-        /// The front of the Collider
+        /// The Highest Z Value of this collider
         /// </summary>
         public float Front
         {
-            get
-            {
-                return Owner.LocalPosition.Z + (Length / 2);
-            }
+            get { return Owner.LocalPosition.Z + (Length / 2); }
         }
 
         /// <summary>
-        /// The Back of the Collider
+        /// The Lowest Z Value of this collider
         /// </summary>
         public float Back
         {
-            get
-            {
-                return Owner.LocalPosition.Z - (Length / 2);
-            }
+            get { return Owner.LocalPosition.Z - (Length / 2); }
         }
 
+        /// <summary>
+        /// The AABBCollider Constructor
+        /// </summary>
+        /// <param name="width">The Width of the The Collider</param>
+        /// <param name="height">The height of the Collider</param>
+        /// <param name="length">The Length of the Collider</param>
+        /// <param name="owner">The Owner of the Collider</param>
         public AABBCollider(float width, float height, float length, Actor owner) : base(owner, ColliderType.AABB)
         {
             _width = width;
@@ -112,6 +101,10 @@ namespace MathForGames
             _length = length;
         }
 
+        /// <summary>
+        /// The AABBCollider using only the Owner
+        /// </summary>
+        /// <param name="owner"></param>
         public AABBCollider(Actor owner) : base(owner, ColliderType.AABB)
         {
             _width = owner.Size.X;
@@ -119,11 +112,21 @@ namespace MathForGames
             _length = owner.Size.Z;
         }
 
-        public override bool CheckCollisionCircle(SphereCollider other)
+        /// <summary>
+        /// Checks the Collision between this collider and a Sphere Collider
+        /// </summary>
+        /// <param name="other">The other collider</param>
+        /// <returns>If Collision Occured</returns>
+        public override bool CheckCollisionSphere(SphereCollider other)
         {
             return other.CheckCollisionAABB(this);
         }
 
+        /// <summary>
+        /// Checks the Collision between this collider and a AABB Collider
+        /// </summary>
+        /// <param name="other">The other collider</param>
+        /// <returns>If Collision Occured</returns>
         public override bool CheckCollisionAABB(AABBCollider other)
         {
             //Checks if the other Collider and this collider belong to the same owner
@@ -131,10 +134,6 @@ namespace MathForGames
                 return false;
 
             CollisionNormal = (other.Owner.WorldPosition - Owner.WorldPosition).Normalized;
-<<<<<<< HEAD
-=======
-
->>>>>>> RayLib3D
             //Returns True if there is an overlap betweens the two colliders
             return other.Left <= Right &&
                    other.Bottom <= Top &&
@@ -144,6 +143,9 @@ namespace MathForGames
                    Back <= other.Front;
         }
 
+        /// <summary>
+        /// Updates the Collider to match the Size of the Owner
+        /// </summary>
         public override void Update()
         {
             _width = Owner.Size.X;
@@ -151,6 +153,9 @@ namespace MathForGames
             _length = Owner.Size.Z;
         }
 
+        /// <summary>
+        /// Draws the Collider
+        /// </summary>
         public override void Draw()
         {
             Raylib.DrawCubeWires(new System.Numerics.Vector3(Owner.WorldPosition.X, Owner.WorldPosition.Y, Owner.WorldPosition.Z), Width, Height, Length, Color.RED);

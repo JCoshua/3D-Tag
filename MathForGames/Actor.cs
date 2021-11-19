@@ -17,7 +17,6 @@ namespace MathForGames
     {
         private string _name;
         private bool _started;
-        private Vector3 _forward = new Vector3(1, 0, 0);
         private Collider _collider;
         private Matrix4 _globalTransform = Matrix4.Identity;
         private Matrix4 _localTransform = Matrix4.Identity;
@@ -31,7 +30,7 @@ namespace MathForGames
         public bool IsActorGrounded = true;
         private Vector3 _acceleration = new Vector3(0, 0, 0);
 
-        public String Name
+        public string Name
         {
             get { return _name; }
         }
@@ -66,12 +65,18 @@ namespace MathForGames
             set { _collider = value; }
         }
 
+        /// <summary>
+        /// The Global Transform of the Actor, regardless of Parent
+        /// </summary>
         public Matrix4 GlobalTransform
         {
             get { return _globalTransform; }
             private set { _globalTransform = value; }
         }
 
+        /// <summary>
+        ///  The local Transform relative to a parent, if any
+        /// </summary>
         public Matrix4 LocalTransform
         {
             get { return _localTransform; }
@@ -102,7 +107,7 @@ namespace MathForGames
         }
 
         /// <summary>
-        /// The position of the actor relative to the parent
+        /// The position of the actor relative to their parent
         /// </summary>
         public Vector3 LocalPosition
         {
@@ -174,6 +179,9 @@ namespace MathForGames
             _shape = shape;
         }
 
+        /// <summary>
+        /// The Base Actor Constructor using Indivual X,Y, and Z Values
+        /// </summary>
         public Actor(float x, float y, float z, string name = "Actor", Shape shape = Shape.NONE) :
             this(new Vector3 { X = x, Y = y, Z = z }, name, shape)
         { }
@@ -183,20 +191,18 @@ namespace MathForGames
         /// </summary>
         public void UpdateTransforms()
         {
+            LocalTransform = _translation * _rotation * _scale;
+
             if (Parent != null)
                 GlobalTransform = Parent.GlobalTransform * LocalTransform;
-<<<<<<< HEAD
-            else
-=======
             else 
->>>>>>> RayLib3D
                 GlobalTransform = LocalTransform;
         }
 
         /// <summary>
-        /// Adds an actor to the scenes list of actors
+        /// Adds an child to the Actor
         /// </summary>
-        /// <param name="child"></param>
+        /// <param name="child">The actor to child to this Actor</param>
         public void AddChild(Actor child)
         {
             //Creates a temp array larger than the original
@@ -241,9 +247,9 @@ namespace MathForGames
                     actorRemoved = true;
             }
 
-            //Merges the arrays
             if (actorRemoved)
             {
+                //Merges the arrays
                 _children = tempArray;
                 //Removes the child from the actor
                 child.Parent = null;
@@ -252,27 +258,30 @@ namespace MathForGames
             return actorRemoved;
         }
 
-
+        /// <summary>
+        /// Initializes the Actor
+        /// </summary>
         public virtual void Start()
         {
             _started = true;
         }
 
+        /// <summary>
+        /// Updates the Actor
+        /// </summary>
         public virtual void Update(float deltaTime)
         {
+            //Translates them by their acceleration, if any
             Translate(Acceleration);
-            LocalTransform = _translation * _rotation * _scale;
             UpdateTransforms();
 
-<<<<<<< HEAD
             if (Collider != null)
                 Collider.Update();
-=======
-            if(Collider != null)
-            Collider.Update();
->>>>>>> RayLib3D
         }
 
+        /// <summary>
+        /// Draws the Actor
+        /// </summary>
         public virtual void Draw()
         {
             System.Numerics.Vector3 position = new System.Numerics.Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z);
@@ -286,23 +295,20 @@ namespace MathForGames
                     Raylib.DrawSphere(position, Size.X, ShapeColor);
                     break;
             }
-
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
-            {
-                if (Collider != null)
-<<<<<<< HEAD
-                    Collider.Draw();
-=======
-                Collider.Draw();
->>>>>>> RayLib3D
-            }
         }
 
+        /// <summary>
+        /// Called when the Actor Ends
+        /// </summary>
         public void End()
         {
 
         }
 
+        /// <summary>
+        /// Performs actions based on what the actor collided with
+        /// </summary>
+        /// <param name="actor">what the actor collided with</param>
         public virtual void OnCollision(Actor actor)
         {
             if (actor.Name == "Floor")
@@ -321,7 +327,7 @@ namespace MathForGames
         public virtual bool CheckCollision(Actor other)
         {
             //Returns false if there is a null collider
-            if (this.Collider == null || other.Collider == null)
+            if (Collider == null || other.Collider == null)
                 return false;
 
             return Collider.CheckCollision(other);
@@ -339,17 +345,6 @@ namespace MathForGames
         }
 
         /// <summary>
-        /// Sets the position of the actor
-        /// </summary>
-        /// <param name="translationX">The new x position</param>
-        /// <param name="translationY">The new y position</param>
-        /// <param name="translationZ">The new z position</param>
-        public void SetTranslation(Vector3 vector)
-        {
-            _translation = Matrix4.CreateTranslation(vector.X, vector.Y, vector.Z);
-        }
-
-        /// <summary>
         /// Applies the given values to the current translation
         /// </summary>
         /// <param name="translationX">The amount to move on the x axis</param>
@@ -361,33 +356,34 @@ namespace MathForGames
         }
 
         /// <summary>
-        /// Applies the given values to the current translation
+        /// Applies the given vector to the current translation
         /// </summary>
-        /// <param name="translationX">The amount to move on the x axis</param>
-        /// <param name="translationY">The amount to move on the y axis</param>
-        /// <param name="translationY">The amount to move on the z axis</param>
+        /// <param name="vector">The Vector to translate by</param>
         public void Translate(Vector3 vector)
         {
             _translation *= Matrix4.CreateTranslation(vector.X, vector.Y, vector.Z);
         }
 
         /// <summary>
-        /// Set the rotation of the actor.
+        /// Sets the rotation of an actor
         /// </summary>
-        /// <param name="radians">The angle of the new rotation in radians.</param>
+        /// <param name="radiansX">The Radians to rotate on the X axis</param>
+        /// <param name="radiansY">The Radians to rotate on the Y axis</param>
+        /// <param name="radiansZ">The Radians to rotate on the Z axis</param>
         public void SetRotation(float radiansX, float radiansY, float radiansZ)
         {
             Matrix4 rotationX = Matrix4.CreateRotationX(radiansX);
             Matrix4 rotationY = Matrix4.CreateRotationY(radiansY);
             Matrix4 rotationZ = Matrix4.CreateRotationZ(radiansZ);
             _rotation = rotationX * rotationY * rotationZ;
-
         }
 
         /// <summary>
         /// Adds a roation to the current transform's rotation.
         /// </summary>
-        /// <param name="radians">The angle in radians to turn.</param>
+        // <param name="radiansX">The Radians to rotate on the X axis</param>
+        /// <param name="radiansY">The Radians to rotate on the Y axis</param>
+        /// <param name="radiansZ">The Radians to rotate on the Z axis</param>
         public void Rotate(float radiansX, float radiansY, float radiansZ)
         {
             Matrix4 rotationX = Matrix4.CreateRotationX(radiansX);

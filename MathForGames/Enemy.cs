@@ -33,12 +33,19 @@ namespace MathForGames
             set { _isTagger = value; }
         }
 
+        /// <summary>
+        /// The base Enemy Collider
+        /// </summary>
+        /// <param name="speed">The Spped of the enemy</param>
         public Enemy(float x, float y, float z, float speed, string name = "Actor")
             : base(x, y, z, name)
         {
             _speed = speed;
         }
 
+        /// <summary>
+        /// Initializes the Enemy
+        /// </summary>
         public override void Start()
         {
             Actor head = new Actor(0, 0.85f, 0, "Head", Shape.SPHERE);
@@ -55,19 +62,26 @@ namespace MathForGames
 
             base.Start();
         }
+
+        /// <summary>
+        /// Updates the Enemy
+        /// </summary>
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime);
 
+            //If they are to far away from the play area
             if (WorldPosition.X >= 145 || WorldPosition.Z >= 145 || WorldPosition.X <= -145 || WorldPosition.Z <= -145)
-            {
+                //Return them to the center of the map
                 SetTranslation(0, 0.5f, 0);
-            }
 
+            //If the Enemy is a tagger
             if (IsTagger)
             {
+                //If a target is close enough to tag
                 if (GetTargetOffense())
                 {
+                    //Chase them
                     Vector3 moveDirection = (_target.WorldPosition - WorldPosition).Normalized;
                     Forward = moveDirection;
                     Velocity = moveDirection * Speed * deltaTime;
@@ -75,6 +89,7 @@ namespace MathForGames
                 }
                 else
                 {
+                    //Wander and check if running into wall
                     for (int i = 0; i < Scene.Actors.Length; i++)
                         if (Scene.Actors[i] is Wall)
                         {
@@ -85,16 +100,20 @@ namespace MathForGames
                     Translate(Velocity);
                 }
             }
+            //If the Enemy is not a Tagger
             else if (!IsTagger)
             {
+                //Check if they are in danger of being tagged
                 if (GetTargetDefense())
                 {
+                    //Check if running into wall
                     for (int i = 0; i < Scene.Actors.Length; i++)
                         if (Scene.Actors[i] is Wall)
                         {
                             Wall checkWall = (Wall)Scene.Actors[i];
                             checkWall.CheckMovement(this);
                         }
+                    //Flee from ally
                     Vector3 moveDirection = new Vector3(-(_target.WorldPosition.X - WorldPosition.X), 0, -(_target.WorldPosition.Z - WorldPosition.Z)).Normalized;
                     Forward = moveDirection;
                     Velocity = moveDirection * Speed * deltaTime;
@@ -102,6 +121,7 @@ namespace MathForGames
                 }
                 else
                 {
+                    //Wander and check if running into wall
                     for (int i = 0; i < Scene.Actors.Length; i++)
                         if (Scene.Actors[i] is Wall)
                         {
@@ -113,22 +133,27 @@ namespace MathForGames
                 }
             }
 
+            //If the Enemy Picked up a power up
             if (_hasPowerUp)
             {
+                //Check how long they have been powered up for
                 powerUpTimer += deltaTime;
+                //If an enemy has powered up for too long
                 if (powerUpTimer >= 20)
                 {
+                    //Reset them
                     SetScale(1, 1, 1);
                     Children[0].SetScale(0.5f, 0.5f, 0.5f);
                     Children[0].SetColor(255, 100, 100, 255);
                     Children[1].SetScale(0.75f, 1, 0.75f);
-                    Children[1].SetColor(10, 10, 255, 255);
+                    Children[1].SetColor(255, 10, 10, 255);
                     Speed = 20;
                     powerUpTimer = 0;
                     _hasPowerUp = false;
                 }
             }
 
+            //If the Actor falls below the Ground
             if (WorldPosition.Y < 0.5f && WorldPosition.Y != 0)
             {
                 //Sets the Vertical Acceleration to 0
@@ -142,33 +167,10 @@ namespace MathForGames
                 //They are not grounded
                 IsActorGrounded = false;
 
+            //If enemy in in the Air
             if (!IsActorGrounded)
-                Acceleration += new Vector3(0, -0.00981f, 0);
-        }
-
-        public override void Draw()
-        {
-            System.Numerics.Vector3 position = new System.Numerics.Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z);
-
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
-            {
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
-                {
-                    System.Numerics.Vector3 endPos = new System.Numerics.Vector3(WorldPosition.X + Forward.X * 10, WorldPosition.Y + Forward.Y * 10, WorldPosition.Z + Forward.Z * 10);
-                    System.Numerics.Vector3 up = new System.Numerics.Vector3(WorldPosition.X, WorldPosition.Y + 10, WorldPosition.Z);
-                    System.Numerics.Vector3 left = new System.Numerics.Vector3(WorldPosition.X + 10, WorldPosition.Y, WorldPosition.Z);
-                    System.Numerics.Vector3 right = new System.Numerics.Vector3(WorldPosition.X - 10, WorldPosition.Y, WorldPosition.Z);
-                    System.Numerics.Vector3 ahead = new System.Numerics.Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z + 10);
-                    System.Numerics.Vector3 behind = new System.Numerics.Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z - 10);
-                    Raylib.DrawLine3D(position, endPos, Color.RED);
-                    Raylib.DrawLine3D(position, up, Color.RED);
-                    Raylib.DrawLine3D(position, left, Color.RED);
-                    Raylib.DrawLine3D(position, right, Color.RED);
-                    Raylib.DrawLine3D(position, ahead, Color.RED);
-                    Raylib.DrawLine3D(position, behind, Color.RED);
-                }
-            }
-                base.Draw();
+                //Apply Gravity
+                Acceleration -= new Vector3(0, 0.00981f, 0);
         }
 
         /// <summary>

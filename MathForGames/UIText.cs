@@ -17,13 +17,11 @@ namespace MathForGames
         /// <summary>
         /// The UIText Constructor
         /// </summary>
-        /// <param name="x">The X Position for the Text Box</param>
-        /// <param name="y">The Y Position for the Text Box</param>
-        /// <param name="name">The Name of the box</param>
-        /// <param name="color">The Text Color</param>
-        /// <param name="width">The length of the text box</param>
-        /// <param name="height">the width</param>
-        /// <param name="text">the text within the box</param>
+        /// <param name="color">The color of the Text</param>
+        /// <param name="width">The Width of the Text Box</param>
+        /// <param name="height">The Height of the Text Box</param>
+        /// <param name="fontSize">The Size of the Text</param>
+        /// <param name="text">The Text to be diplayed</param>
         public UIText(float x, float y, float z, string name, Color color, int width, int height, int fontSize, string text = "")
             : base(x, y, z, name)
         {
@@ -35,11 +33,17 @@ namespace MathForGames
             FontColor = color;
         }
 
+        /// <summary>
+        /// Updates the UIText
+        /// </summary>
         public override void Update(float deltaTime)
         {
+            //Updates the Timer Ui
             if (Name == "Timer")
             {
+                //Show the Time Left
                 Text = "Time: " + (int)SceneManager.TimeLeft;
+                //If there is no TimeLeft, the Runner Team Wins
                 if(SceneManager.TimeLeft <= 0 && SceneManager.Allies[0].IsTagger && !SceneManager.GameOver)
                 {
                     SceneManager.CurrentScene.RemoveUIElement(this);
@@ -55,13 +59,16 @@ namespace MathForGames
                     SceneManager.GameOver = true;
                 }
             }
+            //Updates the Team Remaining UI
             else if(Name == "Team Remaining")
             {
+                //Diplays the Ruuner's Team Status
                 if(SceneManager.Allies[0].IsTagger)
                     Text = SceneManager.Enemies.Length + " Remaining!";
                 else
                     Text = Text = SceneManager.Allies.Length + " Remaining!";
 
+                //If all Allies have been caught, Enemies Win
                 if (SceneManager.Allies.Length <= 0 && !SceneManager.GameOver)
                 {
                     SceneManager.CurrentScene.RemoveUIElement(this);
@@ -70,6 +77,7 @@ namespace MathForGames
                     SceneManager.TimeLeft = 0;
                     SceneManager.GameOver = true;
                 }
+                //If all Enemies have been caught, Allies Win
                 else if(SceneManager.Enemies.Length <= 0 && !SceneManager.GameOver)
                 {
                     SceneManager.CurrentScene.RemoveUIElement(this);
@@ -82,6 +90,9 @@ namespace MathForGames
             base.Update(deltaTime);
         }
 
+        /// <summary>
+        /// Draws The Text Box
+        /// </summary>
         public override void Draw()
         {
             Rectangle textBox = new Rectangle(LocalPosition.X, LocalPosition.Y, Width, Height);

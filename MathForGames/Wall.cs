@@ -8,6 +8,9 @@ namespace MathForGames
 {
     class Wall : Actor
     {
+        /// <summary>
+        /// The Collider that Allies and Enemies use to check for Rotation
+        /// </summary>
         public AABBCollider RotationCollider
         {
             get {
@@ -16,6 +19,13 @@ namespace MathForGames
                 }
         }
 
+        /// <summary>
+        /// The Wall Constructor
+        /// </summary>
+        /// <param name="length">The Length of the Wall</param>
+        /// <param name="height">The Height of the Wall</param>
+        /// <param name="width">The width of the Wall</param>
+        /// <param name="scene">The Scene to add the Wall to</param>
         public Wall(float posX, float posY, float posZ, float length, float height, float width, Scene scene) : base(posX, posY, posZ, "Wall", Shape.CUBE)
         {
             SetScale(length, height, width);
@@ -24,6 +34,10 @@ namespace MathForGames
             SetColor(Color.GRAY);
         }
 
+        /// <summary>
+        /// Check if an Actor should rotate to avoid hitting the Wall.
+        /// </summary>
+        /// <param name="actor">The Actor to check</param>
         public void CheckMovement(Actor actor)
         {
             if (RotationCollider.CheckCollision(actor.Children[0]) && WorldPosition.Y != 0)

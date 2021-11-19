@@ -4,8 +4,14 @@ namespace MathLibrary
 {
     public struct Matrix3
     {
+        /// <summary>
+        /// The Values of the Matrix
+        /// </summary>
         public float M00, M01, M02, M10, M11, M12, M20, M21, M22;
 
+        /// <summary>
+        /// The Matrix Constructor
+        /// </summary>
         public Matrix3(float m00, float m01, float m02,
                         float m10, float m11, float m12,
                         float m20, float m21, float m22)
@@ -15,6 +21,9 @@ namespace MathLibrary
             M20 = m20; M21 = m21; M22 = m22;
         }
 
+        /// <summary>
+        /// The Default Matrix3
+        /// </summary>
         public static Matrix3 Identity
         {
             get
@@ -25,7 +34,7 @@ namespace MathLibrary
             }
         }
         /// <summary>
-        /// 
+        /// Creates a new matrix that has been rotated by the given value
         /// </summary>
         /// <param name="radians"></param>
         /// <returns></returns>
@@ -49,10 +58,10 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Creates a new matrix that has been translated by the given value
+        /// Creates a new matrix that has been translation by the given vector
         /// </summary>
-        /// <param name="x">The x position of the new matrix</param>
-        /// <param name="y">The y position of the new matrix</param>
+        /// <param name="vector">The Vector that contains the values of the new Matrix</param>
+        /// <returns></returns>
         public static Matrix3 CreateTranslation(Vector2 vector)
         {
             return new Matrix3(1, 0, vector.X,
@@ -73,6 +82,12 @@ namespace MathLibrary
                                0, 0, 1);
         }
 
+        /// <summary>
+        /// Adds 2 Matrix3 together
+        /// </summary>
+        /// <param name="lhs">The First Matrix</param>
+        /// <param name="rhs">The Second Matrix</param>
+        /// <returns>The sum Matrix</returns>
         public static Matrix3 operator +(Matrix3 lhs, Matrix3 rhs)
         {
             return new Matrix3(lhs.M00 + rhs.M00, lhs.M01 + rhs.M01, lhs.M02 + rhs.M02,
@@ -80,6 +95,12 @@ namespace MathLibrary
                                lhs.M20 + rhs.M20, lhs.M21 + rhs.M21, lhs.M22 + rhs.M22);
         }
 
+        /// <summary>
+        /// Subtracts one Matrix3 from another
+        /// </summary>
+        /// <param name="lhs">The First Matrix</param>
+        /// <param name="rhs">The Second Matrix</param>
+        /// <returns>The result of the Subtraction</returns>
         public static Matrix3 operator -(Matrix3 lhs, Matrix3 rhs)
         {
             return new Matrix3(lhs.M00 - rhs.M00, lhs.M01 - rhs.M01, lhs.M02 - rhs.M02,
@@ -87,6 +108,12 @@ namespace MathLibrary
                                lhs.M20 - rhs.M20, lhs.M21 - rhs.M21, lhs.M22 - rhs.M22);
         }
 
+        /// <summary>
+        /// Multiplies 2 Matrix3 Together
+        /// </summary>
+        /// <param name="lhs">The First Matrix</param>
+        /// <param name="rhs">The Second Matrix</param>
+        /// <returns>The Product Matrix</returns>
         public static Matrix3 operator *(Matrix3 lhs, Matrix3 rhs)
         {
             return new Matrix3
@@ -112,6 +139,12 @@ namespace MathLibrary
                 );
         }
 
+        /// <summary>
+        /// Multiplies a Matrix3 by a Vector
+        /// </summary>
+        /// <param name="lhs">The Matrix</param>
+        /// <param name="rhs">The Vector</param>
+        /// <returns>The Product Vector</returns>
         public static Vector3 operator *(Matrix3 lhs, Vector3 rhs)
         {
             return new Vector3

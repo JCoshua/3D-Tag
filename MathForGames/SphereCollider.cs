@@ -10,23 +10,40 @@ namespace MathForGames
     {
         private float _collisionRadius;
 
+        /// <summary>
+        /// The Radius of the Collider
+        /// </summary>
         public float CollisionRadius
         {
             get { return _collisionRadius; }
             set { _collisionRadius = value; }
         }
 
+        /// <summary>
+        /// The Base Sphere Collider Constructor
+        /// </summary>
+        /// <param name="collisionRadius">The Radius of the Colliders</param>
+        /// <param name="owner">The Onwer of the Collider</param>
         public SphereCollider(float collisionRadius, Actor owner) : base(owner, ColliderType.SPHERE)
         {
             CollisionRadius = collisionRadius;
         }
 
+        /// <summary>
+        /// The SphereCollider Constructor using only the Owner
+        /// </summary>
+        /// <param name="owner">The Owner of the Collider</param>
         public SphereCollider (Actor owner) : base(owner, ColliderType.SPHERE)
         {
             CollisionRadius = Owner.Size.X;
         }
 
-        public override bool CheckCollisionCircle(SphereCollider other)
+        /// <summary>
+        /// Checks the Collision between this collider and a Sphere Collider
+        /// </summary>
+        /// <param name="other">The other collider</param>
+        /// <returns>If Collision Occured</returns>
+        public override bool CheckCollisionSphere(SphereCollider other)
         {
             //Checks if the other Collider and this collider belong to the same owner
             if (other.Owner == Owner)
@@ -41,6 +58,11 @@ namespace MathForGames
             return distance <= combinedRadii;
         }
 
+        /// <summary>
+        /// Checks the Collision between this collider and a AABB Collider
+        /// </summary>
+        /// <param name="other">The other collider</param>
+        /// <returns>If Collision Occured</returns>
         public override bool CheckCollisionAABB(AABBCollider other)
         {
             //Checks if the other Collider and this collider belong to the same owner
@@ -60,13 +82,16 @@ namespace MathForGames
 
             CollisionNormal = (closestPoint - Owner.WorldPosition).Normalized;
             other.CollisionNormal = (Owner.WorldPosition - closestPoint).Normalized;
-            //Finds the distance from the circle's center to the closest point
+            //Finds the distance from the sphere's center to the closest point
             float distanceFromClosestPoint = Vector3.Distance(Owner.WorldPosition, closestPoint);
 
             //Returns if the distance from the closest point is less than the Collision Radius
             return distanceFromClosestPoint <= CollisionRadius;
         }
 
+        /// <summary>
+        /// Draws the Collider
+        /// </summary>
         public override void Draw()
         {
             Raylib.DrawSphere(new System.Numerics.Vector3(Owner.WorldPosition.X, Owner.WorldPosition.Y, Owner.WorldPosition.Z), CollisionRadius, Color.RED);

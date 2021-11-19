@@ -7,6 +7,11 @@ namespace MathLibrary
         public float X;
         public float Y;
 
+        /// <summary>
+        /// A Vector2 Constructor
+        /// </summary>
+        /// <param name="x">The X Value</param>
+        /// <param name="y">The Y Value</param>
         public Vector2(float x, float y)
         {
             X = x;
@@ -18,8 +23,7 @@ namespace MathLibrary
         /// </summary>
         public float Magnitude
         {
-            get
-            { return (float)Math.Sqrt(X * X + Y * Y); }
+            get { return (float)Math.Sqrt(X * X + Y * Y); }
         }
 
         /// <summary>
@@ -46,7 +50,7 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// 
+        /// Gets the Dot Product of the two Vectors
         /// </summary>
         /// <param name="lhs">The left hand side of the operation</param>
         /// <param name="rhs">The right hand side of the operation</param>

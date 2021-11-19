@@ -56,17 +56,6 @@ namespace MathForGames
         }
 
         /// <summary>
-        /// Initializes that Camera
-        /// </summary>
-        private void InitializeCamera()
-        {
-            //Camera's Position
-            //Camera's Focus Point
-            //Camera's Up Vector (rotation towards target)
-            //The Field of View on the Y Axis (Zoom)
-            //The Camera's mode type
-        }
-        /// <summary>
         /// Called when the application starts
         /// </summary>
         private void Start()
@@ -79,7 +68,7 @@ namespace MathForGames
             Raylib.SetTargetFPS(60);
             _camera = new Camera(new Camera3D(), new System.Numerics.Vector3(0, 10, 10), new System.Numerics.Vector3(0, 0, 0), new System.Numerics.Vector3(0, 1, 0), 45, CameraProjection.CAMERA_PERSPECTIVE);
 
-            Scene scene = new Scene("Arena");
+            Scene scene = new Scene();
             AddScene(scene);
 
             SceneManager.Start();
@@ -163,11 +152,18 @@ namespace MathForGames
             return 0;
         }
 
+        /// <summary>
+        /// Set the Application to close
+        /// </summary>
         public static void CloseApplication()
         {
             _applicationShouldClose = true;
         }
 
+        /// <summary>
+        /// Gets the Current Scene
+        /// </summary>
+        /// <returns>The Current Scene</returns>
         public static Scene GetCurrentScene()
         {
             return _scenes[_currentSceneIndex];

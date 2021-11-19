@@ -11,65 +11,27 @@ namespace MathForGames
         GHOST,
         SPEEDUP,
         SPEEDDOWN,
-<<<<<<< HEAD
-=======
-        SHEILD
->>>>>>> RayLib3D
     }
 
     class PowerUp : Actor
     {
         private ItemType _itemType;
+
+        /// <summary>
+        /// The PowerUp Constructor
+        /// </summary>
+        /// <param name="itemType">The Power Up Type</param>
         public PowerUp(float x, float y, float z, ItemType itemType) : base(x, y, z, "Power Up")
         {
             _itemType = itemType;
         }
 
+        /// <summary>
+        /// Initializes the Power UPs
+        /// </summary>
         public override void Start()
         {
-            CreateSprite();
-            base.Start();
-        }
-
-        public override void Update(float deltaTime)
-        {
             switch (_itemType)
-            {
-                case ItemType.SIZEUP:
-                    if (Children[0].Size.Y <= 1)
-                        Children[0].Scale(1.025f);
-                    else if (Children[0].Size.Y >= 1)
-                        Children[0].SetScale(0.5f, 0.5f, 0.5f);
-                    break;
-<<<<<<< HEAD
-                case ItemType.SIZEDOWN:
-                    if (Children[0].Size.Y >= 0.5f)
-                        Children[0].Scale(0.975f);
-                    else if (Children[0].Size.Y <= 0.5f)
-                        Children[0].SetScale(1, 1, 1);
-                    break;
-                case ItemType.SPEEDUP:
-                    Rotate(0, 0.2f, 0);
-                    break;
-                case ItemType.SPEEDDOWN:
-                    Rotate(0, 0.002f, 0);
-                    break;
-                default:
-                    break;
-=======
->>>>>>> RayLib3D
-            }
-
-            base.Update(deltaTime);
-        }
-
-        public void CreateSprite()
-        {
-<<<<<<< HEAD
-            switch (_itemType)
-=======
-            switch(_itemType)
->>>>>>> RayLib3D
             {
                 case ItemType.SIZEUP:
                     Actor sprite = new Actor(0, 0, 0, "Sprite", Shape.CUBE);
@@ -78,7 +40,6 @@ namespace MathForGames
                     sprite.Collider = new AABBCollider(sprite);
                     AddChild(sprite);
                     break;
-<<<<<<< HEAD
                 case ItemType.SIZEDOWN:
                     sprite = new Actor(0, 0, 0, "Sprite", Shape.CUBE);
                     sprite.SetScale(1, 1, 1);
@@ -101,34 +62,73 @@ namespace MathForGames
                 case ItemType.SPEEDUP:
                     sprite = new Actor(0, 0, 1, "Sprite", Shape.SPHERE);
                     sprite.SetScale(1, 1, 1);
-                    sprite.SetColor(20, 0, 0, 255);
+                    sprite.SetColor(Raylib_cs.Color.YELLOW);
                     sprite.Collider = new AABBCollider(sprite);
                     AddChild(sprite);
                     break;
                 case ItemType.SPEEDDOWN:
                     sprite = new Actor(0, 0, 1, "Sprite", Shape.SPHERE);
                     sprite.SetScale(1, 1, 1);
-                    sprite.SetColor(20, 0, 0, 255);
+                    sprite.SetColor(Raylib_cs.Color.ORANGE);
                     sprite.Collider = new AABBCollider(sprite);
                     AddChild(sprite);
                     break;
             }
+            base.Start();
         }
 
+        /// <summary>
+        /// Updates the Power Up
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        public override void Update(float deltaTime)
+        {
+            switch (_itemType)
+            {
+                case ItemType.SIZEUP:
+                    if (Children[0].Size.Y <= 1)
+                        Children[0].Scale(1.025f);
+                    else if (Children[0].Size.Y >= 1)
+                        Children[0].SetScale(0.5f, 0.5f, 0.5f);
+                    break;
+                case ItemType.SIZEDOWN:
+                    if (Children[0].Size.Y >= 0.5f)
+                        Children[0].Scale(0.975f);
+                    else if (Children[0].Size.Y <= 0.5f)
+                        Children[0].SetScale(1, 1, 1);
+                    break;
+                case ItemType.SPEEDUP:
+                    Rotate(0, 0.2f, 0);
+                    break;
+                case ItemType.SPEEDDOWN:
+                    Rotate(0, 0.025f, 0);
+                    break;
+                default:
+                    break;
+            }
+
+            base.Update(deltaTime);
+        }
+
+        /// <summary>
+        /// Edits a actor that collided wtih this PowerUp based on the ItemType.
+        /// </summary>
+        /// <param name="actor">The actor that collided with this PowerUp</param>
         public override void OnCollision(Actor actor)
         {
-            if(actor.Parent != null)
+            if (actor.Parent != null)
                 return;
+
+            SceneManager.CurrentScene.RemoveActor(this);
 
             switch (_itemType)
             {
                 case ItemType.SIZEUP:
                     actor.Scale(2);
-                    for(int i = 0; i < actor.Children.Length; i++)
+                    for (int i = 0; i < actor.Children.Length; i++)
                     {
                         actor.Children[i].Scale(2);
                     }
-                    SceneManager.CurrentScene.RemoveActor(this);
                     break;
                 case ItemType.SIZEDOWN:
                     actor.Scale(0.5f);
@@ -136,15 +136,14 @@ namespace MathForGames
                     {
                         actor.Children[i].Scale(0.5f);
                     }
-                    SceneManager.CurrentScene.RemoveActor(this);
                     break;
                 case ItemType.GHOST:
-                    if(actor is Player)
+                    if (actor is Player)
                     {
                         actor.Children[1].SetColor(255, 100, 100, 100);
                         actor.Children[2].SetColor(10, 10, 255, 100);
                     }
-                    else if(actor is Ally)
+                    else if (actor is Ally)
                     {
                         actor.Children[0].SetColor(255, 100, 100, 100);
                         actor.Children[1].SetColor(10, 10, 255, 100);
@@ -154,52 +153,31 @@ namespace MathForGames
                         actor.Children[0].SetColor(255, 100, 100, 100);
                         actor.Children[1].SetColor(255, 10, 10, 100);
                     }
-                    SceneManager.CurrentScene.RemoveActor(this);
                     break;
                 case ItemType.SPEEDUP:
-                    if(actor is Ally)
+                    if (actor is Ally)
                     {
                         Ally ally = (Ally)actor;
-                        ally.Speed = 30;
+                        ally.Speed = 25;
                     }
                     if (actor is Enemy)
                     {
                         Enemy enemy = (Enemy)actor;
-                        enemy.Speed = 30;
+                        enemy.Speed = 25;
                     }
                     break;
                 case ItemType.SPEEDDOWN:
                     if (actor is Ally)
                     {
                         Ally ally = (Ally)actor;
-                        ally.Speed = 10;
+                        ally.Speed = 5;
                     }
                     if (actor is Enemy)
                     {
                         Enemy enemy = (Enemy)actor;
-                        enemy.Speed = 10;
+                        enemy.Speed = 5;
                     }
                     break;
-=======
-            }
-        }
-
-        public override void OnCollision(Actor actor)
-        {
-            if(actor.Parent != null)
-                return;
-
-            switch (_itemType)
-            {
-                case ItemType.SIZEUP:
-                    actor.Scale(2);
-                    for(int i = 0; i < actor.Children.Length; i++)
-                    {
-                        actor.Children[i].Scale(2);
-                    }
-                    SceneManager.CurrentScene.RemoveActor(this);
-                    break;
->>>>>>> RayLib3D
             }
         }
     }

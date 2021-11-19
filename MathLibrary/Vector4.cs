@@ -49,7 +49,7 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// 
+        /// Gets the Dot Product of the two Vectors
         /// </summary>
         /// <param name="lhs">The left hand side of the operation</param>
         /// <param name="rhs">The right hand side of the operation</param>
@@ -59,6 +59,12 @@ namespace MathLibrary
             return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
         }
 
+        /// <summary>
+        /// Gets the Cross Product of the two Vectors
+        /// </summary>
+        /// <param name="lhs">The First Vector</param>
+        /// <param name="rhs">The Second Vector</param>
+        /// <returns>The Cross Product of the first vector onto the second</returns>
         public static Vector4 CrossProduct(Vector4 lhs, Vector4 rhs)
         {
             return new Vector4(lhs.Y * rhs.Z - lhs.Z * rhs.Y, lhs.Z * rhs.X - lhs.X * rhs.Z, lhs.X * rhs.Y - lhs.Y * rhs.X, 0);

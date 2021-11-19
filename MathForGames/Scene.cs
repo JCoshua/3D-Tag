@@ -12,20 +12,20 @@ namespace MathForGames
         /// </summary>
         private static Actor[] _actors;
         private static UIText[] _UIElements;
-        private string _name;
 
+        /// <summary>
+        /// The Actor Array
+        /// </summary>
         public static Actor[] Actors
         {
             get { return _actors; }
         }
 
-        public string Name
+        /// <summary>
+        /// The Base Scene Constructor
+        /// </summary>
+        public Scene()
         {
-            get { return _name; }
-        }
-        public Scene(string name)
-        {
-            _name = name;
             _actors = new Actor[0];
             _UIElements = new UIText[0];
         }
@@ -64,6 +64,9 @@ namespace MathForGames
             }
         }
 
+        /// <summary>
+        /// Updates the UI of the Scene
+        /// </summary>
         public virtual void UpdateUI(float deltaTime)
         {
             for (int i = 0; i < _UIElements.Length; i++)
@@ -84,12 +87,18 @@ namespace MathForGames
                 _actors[i].Draw();
         }
 
+        /// <summary>
+        /// Draws out each UI Element in the Scene
+        /// </summary>
         public virtual void DrawUI()
         {
             for (int i = 0; i < _UIElements.Length; i++)
                 _UIElements[i].Draw();
         }
 
+        /// <summary>
+        /// Called when the Scene Ends
+        /// </summary>
         public virtual void End()
         {
 
@@ -167,7 +176,6 @@ namespace MathForGames
             }
 
             //Merges the arrays
-<<<<<<< HEAD
             if (actorRemoved)
             {
                 Actor[] childArray = new Actor[tempArray.Length - actor.Children.Length];
@@ -182,25 +190,6 @@ namespace MathForGames
                 }
                 _actors = childArray;
             }
-=======
-            if (actorRemoved)
-            {
-                Actor[] childArray = new Actor[tempArray.Length - actor.Children.Length];
-                j = 0;
-                for (int i = 0; i < tempArray.Length; i++)
-                {
-                    for(int c = 0;c<actor.Children.Length;c++)
-                        if (tempArray[i] != actor.Children[c])
-                        {
-                            childArray[j] = tempArray[i];
-                            j++;
-                        }
-                }
-                _actors = childArray;
-            }
-                
-
->>>>>>> RayLib3D
             return actorRemoved;
         }
 

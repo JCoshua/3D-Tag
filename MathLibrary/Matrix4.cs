@@ -29,10 +29,10 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Rotate the Matrix on the x Axis
+        /// Creates a new Matrix rotated on the X Axis
         /// </summary>
-        /// <param name="radians"></param>
-        /// <returns></returns>
+        /// <param name="radians">The Value to rotate by</param>
+        /// <returns>The Resulting Matrix</returns>
         public static Matrix4 CreateRotationX(float radians)
         {
             return new Matrix4(1, 0, 0, 0,
@@ -42,10 +42,10 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Rotate the Matrix on the Y Axis
+        /// Creates a new Matrix rotated on the Y Axis
         /// </summary>
-        /// <param name="radians"></param>
-        /// <returns></returns>
+        /// <param name="radians">The Value to rotate by</param>
+        /// <returns>The Resulting Matrix</returns>
         public static Matrix4 CreateRotationY(float radians)
         {
             return new Matrix4((float)Math.Cos(radians), 0, (float)Math.Sin(radians), 0,
@@ -55,10 +55,10 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Rotate the Matrix on the Z Axis
+        /// Creates a new Matrix rotated on the Z Axis
         /// </summary>
-        /// <param name="radians"></param>
-        /// <returns></returns>
+        /// <param name="radians">The Value to rotate by</param>
+        /// <returns>The Resulting Matrix</returns>
         public static Matrix4 CreateRotationZ(float radians)
         {
             return new Matrix4((float)Math.Cos(radians), -(float)Math.Sin(radians), 0, 0,
@@ -68,10 +68,12 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Creates a new matrix that has been translated by the given value
+        /// Creates a new matrix that has been translated by the given values
         /// </summary>
-        /// <param name="x">The x position of the new matrix</param>
-        /// <param name="y">The y position of the new matrix</param>
+        /// <param name="x">The X position of the new matrix</param>
+        /// <param name="y">The Y position of the new matrix</param>
+        /// <param name="z">The Z position of the new matrix</param>
+        /// <returns>The Resulting Matrix</returns>
         public static Matrix4 CreateTranslation(float x, float y, float z)
         {
             return new Matrix4(1, 0, 0, x,
@@ -81,10 +83,10 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Creates a new matrix that has been translated by the given value
+        /// Creates a new matrix that has been translated by the given vector
         /// </summary>
-        /// <param name="x">The x position of the new matrix</param>
-        /// <param name="y">The y position of the new matrix</param>
+        /// <param name="vector">The Vector containing the Translation Values of the new Matrix</param>
+        /// <returns></returns>
         public static Matrix4 CreateTranslation(Vector3 vector)
         {
             return new Matrix4(1, 0, 0, vector.X,
@@ -94,11 +96,12 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Creates a new matrix that has been scaled by the given value
+        /// Creates a new matrix that has been scaled by the given values
         /// </summary>
-        /// <param name="x">The value to use to scale the matrix in the x axis</param>
-        /// <param name="y">The value to use to scale the matrix in the y axis</param>
-        /// <returns>The result of the scale</returns>
+        /// <param name="x">The value to use to scale the matrix in the X axis</param>
+        /// <param name="y">The value to use to scale the matrix in the Y axis</param>
+        /// <param name="z">The value to use to scale the matrix in the Z axis</param>
+        /// <returns>The Resulting Matrix</returns>
         public static Matrix4 CreateScale(float x, float y, float z)
         {
             return new Matrix4(x, 0, 0, 0,
@@ -108,11 +111,10 @@ namespace MathLibrary
         }
 
         /// <summary>
-        /// Creates a new matrix that has been scaled by the given value
+        /// Creates a new matrix that has been scaled by the given vector
         /// </summary>
-        /// <param name="x">The value to use to scale the matrix in the x axis</param>
-        /// <param name="y">The value to use to scale the matrix in the y axis</param>
-        /// <returns>The result of the scale</returns>
+        /// <param name="vector">The Vector to scale the Matrix by</param>
+        /// <returns>The Resulting Matrix</returns>
         public static Matrix4 CreateScale(Vector3 vector)
         {
             return new Matrix4(vector.X, 0, 0, 0,
@@ -120,7 +122,12 @@ namespace MathLibrary
                                0, 0, vector.Z, 0,
                                0, 0, 0, 1);
         }
-
+        /// <summary>
+        /// Adds 2 Matrix4 together
+        /// </summary>
+        /// <param name="lhs">The First Matrix</param>
+        /// <param name="rhs">The Second Matrix</param>
+        /// <returns>The sum Matrix</returns>
         public static Matrix4 operator +(Matrix4 lhs, Matrix4 rhs)
         {
             return new Matrix4(lhs.M00 + rhs.M00, lhs.M01 + rhs.M01, lhs.M02 + rhs.M02, lhs.M03 + rhs.M03,
@@ -128,7 +135,12 @@ namespace MathLibrary
                                lhs.M20 + rhs.M20, lhs.M21 + rhs.M21, lhs.M22 + rhs.M22, lhs.M23 + rhs.M23,
                                lhs.M30 + rhs.M30, lhs.M31 + rhs.M31, lhs.M32 + rhs.M32, lhs.M33 + rhs.M33);
         }
-
+        /// <summary>
+        /// Subtracts one Matrix4 from another
+        /// </summary>
+        /// <param name="lhs">The First Matrix</param>
+        /// <param name="rhs">The Second Matrix</param>
+        /// <returns>The subtracted Matrix</returns>
         public static Matrix4 operator -(Matrix4 lhs, Matrix4 rhs)
         {
             return new Matrix4(lhs.M00 - rhs.M00, lhs.M01 - rhs.M01, lhs.M02 - rhs.M02, lhs.M03 - rhs.M03,
@@ -137,6 +149,12 @@ namespace MathLibrary
                                lhs.M30 - rhs.M30, lhs.M31 - rhs.M31, lhs.M32 - rhs.M32, lhs.M33 - rhs.M33);
         }
 
+        /// <summary>
+        /// Multiplies 2 Matrix4 Together
+        /// </summary>
+        /// <param name="lhs">The First Matrix</param>
+        /// <param name="rhs">The Second Matrix</param>
+        /// <returns>The Product Matrix</returns>
         public static Matrix4 operator *(Matrix4 lhs, Matrix4 rhs)
         {
             return new Matrix4
@@ -176,6 +194,12 @@ namespace MathLibrary
                 );
         }
 
+        /// <summary>
+        /// Multiplies a Matrix4 by a Vector
+        /// </summary>
+        /// <param name="lhs">The Matrix</param>
+        /// <param name="rhs">The Vector</param>
+        /// <returns>The Product Vector</returns>
         public static Vector4 operator *(Matrix4 lhs, Vector4 rhs)
         {
             return new Vector4
